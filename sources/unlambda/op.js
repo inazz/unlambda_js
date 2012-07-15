@@ -17,6 +17,6 @@ unlambda.OP = {
   PRINT:   '.',
   E:       'e',
   READ:    '@',
-  COMPRE:  '?',
+  COMPARE: '?',
   REPRINT: '|',
 };
