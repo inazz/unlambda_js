@@ -8,31 +8,43 @@ tests.unlambda.parser.FindEndOfCommentTest = function() {};
 registerTestSuite(tests.unlambda.parser.FindEndOfCommentTest);
 tests.unlambda.parser.FindEndOfCommentTest.prototype.ReturnStartIfNotComment =
   function() {
-    expectEq(0, unlambda.parser.findEndOfComment("` ii", 0));
-    expectEq(2, unlambda.parser.findEndOfComment("` ii", 2));
-    expectEq(4, unlambda.parser.findEndOfComment("` ii", 4));
+    var code = '` ii';
+    expectEq(0, unlambda.parser.findEndOfComment(code, 0, code.length));
+    expectEq(2, unlambda.parser.findEndOfComment(code, 2, code.length));
+    expectEq(4, unlambda.parser.findEndOfComment(code, 4, code.length));
   };
 
 tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSpaces =
   function() {
-    expectEq(7, unlambda.parser.findEndOfComment("`i \t \r\ni", 2));
-    expectEq(7, unlambda.parser.findEndOfComment("`i \t \r\ni", 6));
+    var code = "`i \t \r\ni";
+    expectEq(7, unlambda.parser.findEndOfComment(code, 2, code.length));
+    expectEq(7, unlambda.parser.findEndOfComment(code, 6, code.length));
   };
 
 tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSharpUntilEoL =
   function() {
-    expectEq(5, unlambda.parser.findEndOfComment("`i#?\ni", 2));
+    var code = "`i#?\ni";
+    expectEq(5, unlambda.parser.findEndOfComment(code, 2, code.length));
   };
 
 tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSharpUntilEoF =
   function() {
-    expectEq(5, unlambda.parser.findEndOfComment("`i#??", 2));
+    var code = "`i#??";
+    expectEq(5, unlambda.parser.findEndOfComment(code, 2, code.length));
   };
 
 tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipMixture =
   function() {
-    expectEq(15, unlambda.parser.findEndOfComment(
-      "`ii #ii?\n \t# \n ii",3));
-    expectEq(15, unlambda.parser.findEndOfComment(
-      "`ii#\n#x\n \t# \n# ", 3));
+    var code1 = "`ii #ii?\n \t# \n ii";
+    var code2 = "`ii#\n#x\n \t# \n# ";
+    expectEq(15, unlambda.parser.findEndOfComment(code1, 3, code1.length));
+    expectEq(15, unlambda.parser.findEndOfComment(code2, 3, code2.length));
+  };
+
+tests.unlambda.parser.FindEndOfCommentTest.prototype.StopAtGivenEnd =
+  function() {
+    var code1 = "`         ii";
+    var code2 = "`#        \nii";
+    expectEq(5, unlambda.parser.findEndOfComment(code1, 1, 5));
+    expectEq(5, unlambda.parser.findEndOfComment(code2, 1, 5));
   };
