@@ -72,9 +72,10 @@ unlambda.runtime.eval_ = function(ctx) {
     ctx.current_variable = new unlambda.Variable(cur.op, v1, cur.v2);
     return;
   }
-  // TODO(inazz): implement D here.
   ctx.current_variable = cur.v2;
-  this.eval_(ctx);
+  if (v1.op != unlambda.OP.D) {
+    this.eval_(ctx);
+  }
   var v2 = ctx.current_variable;
   if (ctx.state != unlambda.runtime.STATE.RUNNING) {
     ctx.current_variable = new unlambda.Variable(cur.op, v1, v2);
@@ -113,6 +114,13 @@ unlambda.runtime.applyS2 = function(ctx, f, x) {
     unlambda.OP.APPLY,
     new unlambda.Variable(unlambda.OP.APPLY, f.v1, x),
     new unlambda.Variable(unlambda.OP.APPLY, f.v2, x));
+  this.eval_(ctx);
+};
+unlambda.runtime.applyD = function(ctx, f, x) {
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.D1, x, null);
+};
+unlambda.runtime.applyD1 = function(ctx, f, x) {
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, f.v1, x);
   this.eval_(ctx);
 };
 unlambda.runtime.applyPrint = function(ctx, f, x) {
@@ -172,6 +180,8 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.K1] = unlambda.runtime.applyK1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S] = unlambda.runtime.applyS;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S1] = unlambda.runtime.applyS1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.D] = unlambda.runtime.applyD;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.D1] = unlambda.runtime.applyD1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.READ] = unlambda.runtime.applyRead;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.E] = unlambda.runtime.applyExit;

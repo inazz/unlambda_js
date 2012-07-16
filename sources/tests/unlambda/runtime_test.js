@@ -115,6 +115,61 @@ UnlambdaRuntimeRunTest.prototype.SStep = function() {
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
   expectEq(varI, ctx.variable);
 };
+UnlambdaRuntimeRunTest.prototype.D = function() {
+  var varTest = unlambda.parser.parse('``d`.2.3`.1`d`.xi').variable;
+  var varPxI = unlambda.parser.parse('`.xi').variable;
+  var varExpected = new unlambda.Variable(unlambda.OP.D1, varPxI, null);
+  var ctx = new unlambda.runtime.RuntimeContext(varTest, this.io);
+  unlambda.runtime.run(ctx);
+
+  expectEq(6, ctx.step);
+  expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
+  expectEq('123', this.output_string);
+  expectEq(varExpected, ctx.variable);
+};
+UnlambdaRuntimeRunTest.prototype.DStep = function() {
+  var varDKIVI = unlambda.parser.parse('``d`ki`vi').variable;
+  var varK = unlambda.parser.parse('k').variable;
+  var varI = unlambda.parser.parse('i').variable;
+  var varV = unlambda.parser.parse('v').variable;
+  var varVI = unlambda.parser.parse('`vi').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varDKIVI, this.io);
+
+  ctx.step_limit = 1;
+  unlambda.runtime.run(ctx);
+  var varD1KIVI = new unlambda.Variable(
+    unlambda.OP.APPLY, 
+    new unlambda.Variable(
+      unlambda.OP.D1,
+      new unlambda.Variable(unlambda.OP.APPLY, varK, varI), null),
+    varVI);
+  expectEq(varD1KIVI, ctx.variable);
+
+  ctx.step_limit = 2;
+  unlambda.runtime.run(ctx);
+  var varD1KIV = new unlambda.Variable(
+    unlambda.OP.APPLY, 
+    new unlambda.Variable(
+      unlambda.OP.D1,
+      new unlambda.Variable(unlambda.OP.APPLY, varK, varI), null),
+    varV);
+  expectEq(varD1KIV, ctx.variable);
+
+  ctx.step_limit = 3;
+  unlambda.runtime.run(ctx);
+  var varKIV = new unlambda.Variable(
+    unlambda.OP.APPLY, 
+    new unlambda.Variable(unlambda.OP.APPLY, varK, varI), varV);
+  expectEq(varKIV, ctx.variable);
+
+  ctx.step_limit = 4;
+  unlambda.runtime.run(ctx);
+  var varK1IV = new unlambda.Variable(
+    unlambda.OP.APPLY, 
+    new unlambda.Variable(unlambda.OP.K1, varI, null), varV);
+  expectEq(varK1IV, ctx.variable);
+
+};
 
 UnlambdaRuntimeRunTest.prototype.Print = function() {
   var varPxS = unlambda.parser.parse('`.xs').variable;
