@@ -9,7 +9,7 @@ function UnlambdaRuntimeRunTest() {
         if (that.input_index < that.input_array.length) {
           return that.input_array[that.input_index++];
         } else {
-          return -1;
+          return unlambda.runtime.IO_CODE.EOF;
         }
       };}(this),
     function(that) {
@@ -109,4 +109,42 @@ UnlambdaRuntimeRunTest.prototype.Print = function() {
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
   expectEq(varS, ctx.variable);
   expectEq('x', this.output_string);
+};
+
+UnlambdaRuntimeRunTest.prototype.ReadChar = function() {
+  var varRK = unlambda.parser.parse('`@k').variable;
+  var varKI = unlambda.parser.parse('`ki').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varRK, this.io);
+
+  this.input_array = [ 'x' ];
+  ctx.step_limit = 1;
+  unlambda.runtime.run(ctx);
+  expectEq(varKI, ctx.variable);
+  expectEq('x', ctx.current_character);
+};
+
+UnlambdaRuntimeRunTest.prototype.ReadEOF = function() {
+  var varRK = unlambda.parser.parse('`@k').variable;
+  var varKV = unlambda.parser.parse('`kv').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varRK, this.io);
+
+  this.input_array = [];
+  ctx.step_limit = 1;
+  unlambda.runtime.run(ctx);
+  expectEq(varKV, ctx.variable);
+  expectEq(unlambda.runtime.IO_CODE.EOF, ctx.current_character);
+};
+
+UnlambdaRuntimeRunTest.prototype.ReadBlock = function() {
+  var varRK = unlambda.parser.parse('`@k').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varRK, this.io);
+
+  this.input_array = [ unlambda.runtime.IO_CODE.BLOCK ];
+  ctx.step_limit = 1;
+  unlambda.runtime.run(ctx);
+
+  expectEq(unlambda.runtime.STATE.INPUT_WAIT, ctx.state);
+  expectEq(0, ctx.step);
+  expectEq(varRK, ctx.variable);
+  expectEq(unlambda.runtime.IO_CODE.EOF, ctx.current_character);
 };

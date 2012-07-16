@@ -34,7 +34,7 @@ unlambda.runtime.RuntimeContext = function(variable, io) {
   this.variable = variable; // unlambda.Variable
   this.io = io; // unlambda.runtime.IO
   // -1 for no read yet or EOF. valid value is 0-255.
-  this.current_character = -1; // int
+  this.current_character = unlambda.runtime.IO_CODE.EOF; // string
   this.step = 0; // int
   this.step_limit = -1; // int
   this.state = unlambda.runtime.STATE.RUNNING;
@@ -90,7 +90,7 @@ unlambda.runtime.applyI = function(ctx, f, x) {
   ctx.current_variable = x;
 };
 unlambda.runtime.applyV = function(ctx, f, x) {
-  ctx.current_variable = new unlambda.Variable(f.op, null, null);
+  ctx.current_variable = f;
 };
 unlambda.runtime.applyK = function(ctx, f, x) {
   ctx.current_variable = new unlambda.Variable(unlambda.OP.K1, x, null);
@@ -115,6 +115,24 @@ unlambda.runtime.applyPrint = function(ctx, f, x) {
   ctx.io.output(f.v1);
   ctx.current_variable = x;
 };
+unlambda.runtime.applyRead = function(ctx, f, x) {
+  var s = ctx.io.input();
+  if (s == unlambda.runtime.IO_CODE.BLOCK) {
+    ctx.step--;
+    ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, f, x);
+    ctx.state = unlambda.runtime.STATE.INPUT_WAIT;
+  } else if (s == unlambda.runtime.IO_CODE.EOF) {
+    ctx.current_character = s;
+    ctx.current_variable = new unlambda.Variable(
+      unlambda.OP.APPLY, x, new unlambda.Variable(unlambda.OP.V, null, null));
+    this.eval_(ctx);
+  } else {
+    ctx.current_character = s;
+    ctx.current_variable = new unlambda.Variable(
+      unlambda.OP.APPLY, x, new unlambda.Variable(unlambda.OP.I, null, null));
+    this.eval_(ctx);
+  }
+};
 
 unlambda.runtime.FUNC_TABLE = {};
 unlambda.runtime.FUNC_TABLE[unlambda.OP.I] = unlambda.runtime.applyI;
@@ -125,3 +143,4 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.S] = unlambda.runtime.applyS;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S1] = unlambda.runtime.applyS1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.READ] = unlambda.runtime.applyRead;
