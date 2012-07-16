@@ -153,6 +153,16 @@ unlambda.runtime.applyReprint = function(ctx, f, x) {
   ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, x, varArg);
   this.eval_(ctx);
 };
+unlambda.runtime.applyCompare = function(ctx, f, x) {
+  var varArg;
+  if (ctx.current_character == f.v1) {
+    varArg = new unlambda.Variable(unlambda.OP.I, null, null);
+  } else {
+    varArg = new unlambda.Variable(unlambda.OP.V, null, null);
+  }
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, x, varArg);
+  this.eval_(ctx);
+};
 
 unlambda.runtime.FUNC_TABLE = {};
 unlambda.runtime.FUNC_TABLE[unlambda.OP.I] = unlambda.runtime.applyI;
@@ -166,4 +176,4 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.READ] = unlambda.runtime.applyRead;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.E] = unlambda.runtime.applyExit;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.REPRINT] = unlambda.runtime.applyReprint;
-
+unlambda.runtime.FUNC_TABLE[unlambda.OP.COMPARE] = unlambda.runtime.applyCompare;

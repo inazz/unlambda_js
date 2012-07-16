@@ -253,3 +253,53 @@ UnlambdaRuntimeRunTest.prototype.ReprintEOFStep = function() {
   expectEq(1, ctx.step);
   expectEq(varKV, ctx.variable);
 };
+
+UnlambdaRuntimeRunTest.prototype.CompareMatch = function() {
+  var varCxI = unlambda.parser.parse('`?xi').variable;
+  var varI = unlambda.parser.parse('i').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varCxI, this.io);
+
+  ctx.current_character = 'x';
+  unlambda.runtime.run(ctx);
+
+  expectEq(2, ctx.step);
+  expectEq(varI, ctx.variable);
+};
+
+UnlambdaRuntimeRunTest.prototype.CompareMatchStep = function() {
+  var varCxS = unlambda.parser.parse('`?xs').variable;
+  var varSI = unlambda.parser.parse('`si').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varCxS, this.io);
+
+  ctx.step_limit = 1;
+  ctx.current_character = 'x';
+  unlambda.runtime.run(ctx);
+
+  expectEq(1, ctx.step);
+  expectEq(varSI, ctx.variable);
+};
+
+UnlambdaRuntimeRunTest.prototype.CompareFail = function() {
+  var varCxI = unlambda.parser.parse('`?xi').variable;
+  var varV = unlambda.parser.parse('v').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varCxI, this.io);
+
+  ctx.current_character = '';
+  unlambda.runtime.run(ctx);
+
+  expectEq(2, ctx.step);
+  expectEq(varV, ctx.variable);
+};
+
+UnlambdaRuntimeRunTest.prototype.CompareFailStep = function() {
+  var varCxI = unlambda.parser.parse('`?xi').variable;
+  var varIV = unlambda.parser.parse('`iv').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varCxI, this.io);
+
+  ctx.step_limit = 1;
+  ctx.current_character = 'y';
+  unlambda.runtime.run(ctx);
+
+  expectEq(1, ctx.step);
+  expectEq(varIV, ctx.variable);
+};
