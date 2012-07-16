@@ -6,9 +6,12 @@ class SourceFiles
       'unlambda/op.js' => [],
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/parser.js' => ['unlambda/op.js', 'unlambda/variable.js'],
+      'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
       'tests/unlambda/op_test.js' => ['unlambda/op.js'],
-      'tests/unlambda/parser_test.js' => ['unlambda/parser.js'],
-      'tests/unlambda/variable_test.js' => ['unlambda/variable.js'],
+      'tests/unlambda/parser_test.js' => [
+        'unlambda/variable_gjstestequals.js', 'unlambda/parser.js'],
+      'tests/unlambda/variable_gjstestequals_test.js' => [
+        'unlambda/variable_gjstestequals.js'],
     }
   end
   def getFileList()
