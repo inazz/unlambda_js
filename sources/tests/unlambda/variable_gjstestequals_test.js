@@ -1,10 +1,8 @@
 
-var tests = tests || {};
-tests.unlambda = tests.unlambda || {};
-tests.unlambda.VariableTest = function() {};
-registerTestSuite(tests.unlambda.VariableTest);
+function UnlambdaVariableGjstestequalsTest() {}
+registerTestSuite(UnlambdaVariableGjstestequalsTest);
 
-tests.unlambda.VariableTest.prototype.GjstestEquals = function() {
+UnlambdaVariableGjstestequalsTest.prototype.GjstestEquals = function() {
   var variableI = new unlambda.Variable(unlambda.OP.I, null, null);
   var variableI2 = new unlambda.Variable(unlambda.OP.I, null, null);
   var variablePrintA = new unlambda.Variable(unlambda.OP.PRINT, 'a', null);

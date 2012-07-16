@@ -1,10 +1,8 @@
 
-var tests = tests || {};
-tests.unlambda = tests.unlambda || {};
-tests.unlambda.OpTest = function() {};
-registerTestSuite(tests.unlambda.OpTest);
+function UnlambdaOpTest(){}
+registerTestSuite(UnlambdaOpTest);
 
-tests.unlambda.OpTest.prototype.OpContainsKeywordsOtherThanR = function() {
+UnlambdaOpTest.prototype.OpContainsKeywordsOtherThanR = function() {
   var keywords = '`ksivcde@|.?';
   for (var i = 0; i < keywords.length; i++) {
     var keyword = keywords.charAt(i);

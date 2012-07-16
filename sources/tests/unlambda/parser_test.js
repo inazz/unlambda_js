@@ -1,18 +1,15 @@
 
-var tests = tests || {};
-tests.unlambda = tests.unlambda || {};
-tests.unlambda.parser = tests.unlambda.parser || {};
-
-tests.unlambda.parser.ParseTest = function() {
+function UnlambdaParserParseTest() {
   this.checkParseSuccess = function(code, expectedVariable) {
     var res = unlambda.parser.parse(code);
     expectTrue(res.success);
     expectThat(res.error, isNull);
     expectThat(res.variable, equals(expectedVariable));
   };
-};
-registerTestSuite(tests.unlambda.parser.ParseTest);
-tests.unlambda.parser.ParseTest.prototype.Primitives = function() {
+}
+registerTestSuite(UnlambdaParserParseTest)
+
+UnlambdaParserParseTest.prototype.Primitives = function() {
   this.checkParseSuccess(
     's', new unlambda.Variable(unlambda.OP.S, null, null));
   this.checkParseSuccess(
@@ -38,7 +35,8 @@ tests.unlambda.parser.ParseTest.prototype.Primitives = function() {
   this.checkParseSuccess(
     'r', new unlambda.Variable(unlambda.OP.PRINT, "\n", null));
 };
-tests.unlambda.parser.ParseTest.prototype.TwoCharCornerCases = function() {
+
+UnlambdaParserParseTest.prototype.TwoCharCornerCases = function() {
   this.checkParseSuccess(
     ".#", new unlambda.Variable(unlambda.OP.PRINT, '#', null));
   this.checkParseSuccess(
@@ -52,7 +50,8 @@ tests.unlambda.parser.ParseTest.prototype.TwoCharCornerCases = function() {
   this.checkParseSuccess(
     "?\n", new unlambda.Variable(unlambda.OP.COMPARE, "\n", null));
 };
-tests.unlambda.parser.ParseTest.prototype.Apply = function() {
+
+UnlambdaParserParseTest.prototype.Apply = function() {
   this.checkParseSuccess(
     "`i`vk",
     new unlambda.Variable(
@@ -63,7 +62,8 @@ tests.unlambda.parser.ParseTest.prototype.Apply = function() {
         new unlambda.Variable(unlambda.OP.V, null, null),
         new unlambda.Variable(unlambda.OP.K, null, null))));
 };
-tests.unlambda.parser.ParseTest.prototype.CommendsAreIgnored = function() {
+
+UnlambdaParserParseTest.prototype.CommendsAreIgnored = function() {
   this.checkParseSuccess(
     "  `i #test\nv\n",
     new unlambda.Variable(
@@ -71,19 +71,22 @@ tests.unlambda.parser.ParseTest.prototype.CommendsAreIgnored = function() {
       new unlambda.Variable(unlambda.OP.I, null, null),
       new unlambda.Variable(unlambda.OP.V, null, null)));
 };
-tests.unlambda.parser.ParseTest.prototype.ExtraCharacter = function() {
+
+UnlambdaParserParseTest.prototype.ExtraCharacter = function() {
   var res = unlambda.parser.parse('`iiv');
   expectFalse(res.success);
   expectEq(unlambda.parser.ERROR.EXTRA_CHARACTER, res.error);
   expectEq(3, res.error_pos);
 };
-tests.unlambda.parser.ParseTest.prototype.UnexpectedCharacter = function() {
+
+UnlambdaParserParseTest.prototype.UnexpectedCharacter = function() {
   var res = unlambda.parser.parse('``ihi');
   expectFalse(res.success);
   expectEq(unlambda.parser.ERROR.UNEXPECTED_CHARACTER, res.error);
   expectEq(3, res.error_pos);
 };
-tests.unlambda.parser.ParseTest.prototype.UnexpectedEOF = function() {
+
+UnlambdaParserParseTest.prototype.UnexpectedEOF = function() {
   var res = unlambda.parser.parse('');
   expectFalse(res.success);
   expectEq(unlambda.parser.ERROR.UNEXPECTED_EOF, res.error);
@@ -112,10 +115,10 @@ tests.unlambda.parser.ParseTest.prototype.UnexpectedEOF = function() {
 
 
 
+function UnlambdaParserFindEndOfCommentTest() {}
+registerTestSuite(UnlambdaParserFindEndOfCommentTest);
 
-tests.unlambda.parser.FindEndOfCommentTest = function() {};
-registerTestSuite(tests.unlambda.parser.FindEndOfCommentTest);
-tests.unlambda.parser.FindEndOfCommentTest.prototype.ReturnStartIfNotComment =
+UnlambdaParserFindEndOfCommentTest.prototype.ReturnStartIfNotComment =
   function() {
     var code = '` ii';
     expectEq(0, unlambda.parser.findEndOfComment(code, 0, code.length));
@@ -123,26 +126,26 @@ tests.unlambda.parser.FindEndOfCommentTest.prototype.ReturnStartIfNotComment =
     expectEq(4, unlambda.parser.findEndOfComment(code, 4, code.length));
   };
 
-tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSpaces =
+UnlambdaParserFindEndOfCommentTest.prototype.SkipSpaces =
   function() {
     var code = "`i \t \r\ni";
     expectEq(7, unlambda.parser.findEndOfComment(code, 2, code.length));
     expectEq(7, unlambda.parser.findEndOfComment(code, 6, code.length));
   };
 
-tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSharpUntilEoL =
+UnlambdaParserFindEndOfCommentTest.prototype.SkipSharpUntilEoL =
   function() {
     var code = "`i#?\ni";
     expectEq(5, unlambda.parser.findEndOfComment(code, 2, code.length));
   };
 
-tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipSharpUntilEoF =
+UnlambdaParserFindEndOfCommentTest.prototype.SkipSharpUntilEoF =
   function() {
     var code = "`i#??";
     expectEq(5, unlambda.parser.findEndOfComment(code, 2, code.length));
   };
 
-tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipMixture =
+UnlambdaParserFindEndOfCommentTest.prototype.SkipMixture =
   function() {
     var code1 = "`ii #ii?\n \t# \n ii";
     var code2 = "`ii#\n#x\n \t# \n# ";
@@ -150,7 +153,7 @@ tests.unlambda.parser.FindEndOfCommentTest.prototype.SkipMixture =
     expectEq(15, unlambda.parser.findEndOfComment(code2, 3, code2.length));
   };
 
-tests.unlambda.parser.FindEndOfCommentTest.prototype.StopAtGivenEnd =
+UnlambdaParserFindEndOfCommentTest.prototype.StopAtGivenEnd =
   function() {
     var code1 = "`         ii";
     var code2 = "`#        \nii";
