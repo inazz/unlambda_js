@@ -1,7 +1,7 @@
 #!/usr/bin/ruby
 
 require 'find'
-require './source_files.rb'
+require File.dirname(__FILE__) + '/source_files.rb'
 
 class TestRunner
 
