@@ -99,3 +99,14 @@ UnlambdaRuntimeRunTest.prototype.S = function() {
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
   expectEq(varI, ctx.variable);
 };
+
+UnlambdaRuntimeRunTest.prototype.Print = function() {
+  var varPxS = unlambda.parser.parse('`.xs').variable;
+  var varS = unlambda.parser.parse('s').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varPxS, this.io);
+  unlambda.runtime.run(ctx);
+  expectEq(1, ctx.step);
+  expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
+  expectEq(varS, ctx.variable);
+  expectEq('x', this.output_string);
+};

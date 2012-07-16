@@ -12,8 +12,8 @@ unlambda.runtime = unlambda.runtime || {};
 // outputCallback is a function take one character string.
 // it will be called when '.x' is called.
 unlambda.runtime.IO = function(inputCallback, outputCallback) {
-  this.input = inputCallback; // function(): int
-  this.output = outputCallback; // function(int)
+  this.input = inputCallback; // function(): string
+  this.output = outputCallback; // function(string)
 };
 
 unlambda.runtime.IO_CODE = {
@@ -111,6 +111,10 @@ unlambda.runtime.applyS2 = function(ctx, f, x) {
     new unlambda.Variable(unlambda.OP.APPLY, f.v2, x));
   this.eval_(ctx);
 };
+unlambda.runtime.applyPrint = function(ctx, f, x) {
+  ctx.io.output(f.v1);
+  ctx.current_variable = x;
+};
 
 unlambda.runtime.FUNC_TABLE = {};
 unlambda.runtime.FUNC_TABLE[unlambda.OP.I] = unlambda.runtime.applyI;
@@ -120,3 +124,4 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.K1] = unlambda.runtime.applyK1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S] = unlambda.runtime.applyS;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S1] = unlambda.runtime.applyS1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
