@@ -142,6 +142,17 @@ unlambda.runtime.applyExit = function(ctx, f, x) {
   ctx.exit_arg = x;
   ctx.current_variable = new unlambda.Variable(unlambda.OP.V, null, null);
 };
+unlambda.runtime.applyReprint = function(ctx, f, x) {
+  var varArg;
+  if (ctx.current_character == unlambda.runtime.IO_CODE.EOF) {
+    varArg = new unlambda.Variable(unlambda.OP.V, null, null);
+  } else {
+    varArg = new unlambda.Variable(
+      unlambda.OP.PRINT, ctx.current_character, null);
+  }
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, x, varArg);
+  this.eval_(ctx);
+};
 
 unlambda.runtime.FUNC_TABLE = {};
 unlambda.runtime.FUNC_TABLE[unlambda.OP.I] = unlambda.runtime.applyI;
@@ -154,4 +165,5 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.READ] = unlambda.runtime.applyRead;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.E] = unlambda.runtime.applyExit;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.REPRINT] = unlambda.runtime.applyReprint;
 
