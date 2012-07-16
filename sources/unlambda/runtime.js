@@ -40,6 +40,7 @@ unlambda.runtime.RuntimeContext = function(variable, io) {
   this.state = unlambda.runtime.STATE.RUNNING;
   // for temporary use while run().
   this.current_variable = null;
+  this.exit_arg = null;
 };
 
 // ctx -- unlambda.runtime.RuntimeContext
@@ -51,6 +52,9 @@ unlambda.runtime.run = function(ctx) {
   ctx.state = unlambda.runtime.STATE.RUNNING;
   this.eval_(ctx);
   ctx.variable = ctx.current_variable;
+  if (ctx.state == unlambda.runtime.STATE.EXITED) {
+    ctx.variable = ctx.exit_arg;
+  }
   if (ctx.state == unlambda.runtime.STATE.RUNNING) {
     ctx.state = unlambda.runtime.STATE.EXITED;
   }
@@ -133,6 +137,11 @@ unlambda.runtime.applyRead = function(ctx, f, x) {
     this.eval_(ctx);
   }
 };
+unlambda.runtime.applyExit = function(ctx, f, x) {
+  ctx.state = unlambda.runtime.STATE.EXITED;
+  ctx.exit_arg = x;
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.V, null, null);
+};
 
 unlambda.runtime.FUNC_TABLE = {};
 unlambda.runtime.FUNC_TABLE[unlambda.OP.I] = unlambda.runtime.applyI;
@@ -144,3 +153,5 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.S1] = unlambda.runtime.applyS1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.READ] = unlambda.runtime.applyRead;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.E] = unlambda.runtime.applyExit;
+

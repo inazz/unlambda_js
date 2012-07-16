@@ -148,3 +148,15 @@ UnlambdaRuntimeRunTest.prototype.ReadBlock = function() {
   expectEq(varRK, ctx.variable);
   expectEq(unlambda.runtime.IO_CODE.EOF, ctx.current_character);
 };
+
+UnlambdaRuntimeRunTest.prototype.Exit = function() {
+  var varKES = unlambda.parser.parse('`k`es').variable;
+  var varS = unlambda.parser.parse('s').variable;
+  var ctx = new unlambda.runtime.RuntimeContext(varKES, this.io);
+
+  unlambda.runtime.run(ctx);
+
+  expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
+  expectEq(1, ctx.step);
+  expectEq(varS, ctx.variable);
+};
