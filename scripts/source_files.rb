@@ -14,6 +14,8 @@ class SourceFiles
         'unlambda/variable_gjstestequals.js', 'unlambda/parser.js'],
       'tests/unlambda/runtime_test.js' => [
         'unlambda/runtime.js', 'unlambda/variable_gjstestequals.js'],
+      'tests/unlambda/variable_test.js' => [
+        'unlambda/op.js', 'unlambda/variable.js'],
       'tests/unlambda/variable_gjstestequals_test.js' => [
         'unlambda/variable_gjstestequals.js'],
     }
