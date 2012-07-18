@@ -26,6 +26,8 @@ unlambda.runtime.STATE = {
   EXITED: 1,
   INPUT_WAIT: 2,
   STEP_LIMIT: 3,
+  C_BREAK: 4,
+  C1_BREAK: 5,
 };
 
 // variable -- unlambda.Variable
@@ -33,14 +35,16 @@ unlambda.runtime.RuntimeContext = function(variable, io) {
   this.original_variable = variable; // unlambda.Variable
   this.variable = variable; // unlambda.Variable
   this.io = io; // unlambda.runtime.IO
-  // -1 for no read yet or EOF. valid value is 0-255.
   this.current_character = unlambda.runtime.IO_CODE.EOF; // string
   this.step = 0; // int
   this.step_limit = -1; // int
   this.state = unlambda.runtime.STATE.RUNNING;
+
   // for temporary use while run().
-  this.current_variable = null;
-  this.exit_arg = null;
+  this.current_variable = null; // unlambda.Variable
+  this.exit_arg = null; // unlambda.Variable
+  this.event_c1 = null; // unlambda.Variable
+  this.c1_result = null; // unlambda.Variable
 };
 
 // ctx -- unlambda.runtime.RuntimeContext
@@ -48,21 +52,44 @@ unlambda.runtime.run = function(ctx) {
   if (ctx.state == unlambda.runtime.STATE.EXITED) {
     return;
   }
-  ctx.current_variable = ctx.variable;
   ctx.state = unlambda.runtime.STATE.RUNNING;
-  this.eval_(ctx);
-  ctx.variable = ctx.current_variable;
-  if (ctx.state == unlambda.runtime.STATE.EXITED) {
-    ctx.variable = ctx.exit_arg;
-  }
-  if (ctx.state == unlambda.runtime.STATE.RUNNING) {
-    ctx.state = unlambda.runtime.STATE.EXITED;
+  while (ctx.state == unlambda.runtime.STATE.RUNNING) {
+    ctx.current_variable = ctx.variable;
+    this.eval_(ctx);
+    ctx.variable = ctx.current_variable;
+    switch (ctx.state) {
+    case unlambda.runtime.STATE.EXITED:
+      ctx.variable = ctx.exit_arg;
+      ctx.exit_arg = null;
+      break;
+    case unlambda.runtime.STATE.RUNNING:
+      ctx.state = unlambda.runtime.STATE.EXITED;
+      break;
+    case unlambda.runtime.STATE.C_BREAK:
+      ctx.event_c1.v1 = ctx.variable;
+      ctx.event_c1.v2 = ctx.current_character;
+      ctx.event_c1 = null;
+      ctx.state = unlambda.runtime.STATE.RUNNING;
+      break;
+    case unlambda.runtime.STATE.C1_BREAK:
+      ctx.variable = ctx.event_c1.v1;
+      ctx.current_character = ctx.event_c1.v2;
+      ctx.state = unlambda.runtime.STATE.RUNNING;
+      break;
+    }
   }
 };
 
 unlambda.runtime.eval_ = function(ctx) {
   var cur = ctx.current_variable;
   if (cur.op != unlambda.OP.APPLY) {
+    return;
+  }
+  if (ctx.c1_result !== null && cur.v2 === ctx.event_c1) {
+    // resuming from `<cont>X
+    ctx.current_variable = ctx.c1_result;
+    ctx.c1_result = null;
+    ctx.event_c1 = null;
     return;
   }
   ctx.current_variable = cur.v1;
@@ -115,6 +142,17 @@ unlambda.runtime.applyS2 = function(ctx, f, x) {
     new unlambda.Variable(unlambda.OP.APPLY, f.v1, x),
     new unlambda.Variable(unlambda.OP.APPLY, f.v2, x));
   this.eval_(ctx);
+};
+unlambda.runtime.applyC = function(ctx, f, x) {
+  var varC1 = new unlambda.Variable(unlambda.OP.C1, null, null);
+  ctx.state = unlambda.runtime.STATE.C_BREAK;
+  ctx.event_c1 = varC1;
+  ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, x, varC1);
+};
+unlambda.runtime.applyC1 = function(ctx, f, x) {
+  ctx.state = unlambda.runtime.STATE.C1_BREAK;
+  ctx.event_c1 = f;
+  ctx.c1_result = x;
 };
 unlambda.runtime.applyD = function(ctx, f, x) {
   ctx.current_variable = new unlambda.Variable(unlambda.OP.D1, x, null);
@@ -180,6 +218,8 @@ unlambda.runtime.FUNC_TABLE[unlambda.OP.K1] = unlambda.runtime.applyK1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S] = unlambda.runtime.applyS;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S1] = unlambda.runtime.applyS1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.S2] = unlambda.runtime.applyS2;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.C] = unlambda.runtime.applyC;
+unlambda.runtime.FUNC_TABLE[unlambda.OP.C1] = unlambda.runtime.applyC1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.D] = unlambda.runtime.applyD;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.D1] = unlambda.runtime.applyD1;
 unlambda.runtime.FUNC_TABLE[unlambda.OP.PRINT] = unlambda.runtime.applyPrint;
