@@ -3,12 +3,16 @@ class SourceFiles
 
   def getDependencyHash()
     return {
+      # build target
+      'entry.js' => ['unlambda/runtime.js'],
+      # unlambda core logics
       'unlambda/op.js' => [],
       'unlambda/parser.js' => ['unlambda/op.js', 'unlambda/variable.js'],
       'unlambda/runtime.js' => [
         'unlambda/op.js', 'unlambda/variable.js', 'unlambda/parser.js'],
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
+      # tests
       'tests/unlambda/op_test.js' => ['unlambda/op.js'],
       'tests/unlambda/parser_test.js' => [
         'unlambda/variable_gjstestequals.js', 'unlambda/parser.js'],
