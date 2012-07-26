@@ -14,6 +14,7 @@ class TestRunner
 
   def parseArgs(args)
     opt = OptionParser.new
+    @test_filter = nil
     opt.on('--test TEST_FILE', String, /.+/,
            'regexp to match test file name.') {|f|
       @test_filter = f}
@@ -31,14 +32,15 @@ class TestRunner
   end
 
   def runTests()
-    files = SourceFiles.new.getFileList()
+    sourceFiles = SourceFiles.new
+    testTargets = sourceFiles.getAllFiles().select{|f| f =~/\_test\.js$/}
     if (@test_filter != nil)
-      files.reject!{|f| f =~/\_test\.js$/ && !f.match(@test_filter)}
+      testTargets.reject!{|f| !f.match(@test_filter)}
     end
+    files = sourceFiles.getOrderedFileList(testTargets)
     files.map!{|f| 'sources/' + f}
     return system('gjstest', '--js_files=' + files.join(','))
   end
-
 end
 
 TestRunner.new.main(ARGV)

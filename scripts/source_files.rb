@@ -20,24 +20,32 @@ class SourceFiles
         'unlambda/variable_gjstestequals.js'],
     }
   end
-  def getFileList()
+  private :getDependencyHash
+
+  def getAllFiles()
+    getDependencyHash().keys
+  end
+
+  def getOrderedFileList(buildTargets)
     nameToScore = {}
     depsHash = getDependencyHash()
     # scoring
-    depsHash.keys.each{|file|
+    buildTargets.each{|file|
       scoreFileDfs(file, nameToScore, depsHash)
     }
+    files = nameToScore.keys
     # sanitize
-    depsHash.each{|file, list|
-      list.each{|dep|
+    files.each{|file|
+      depsHash[file].each{|dep|
         if (nameToScore[file] <= nameToScore[dep])
           raise 'dependency broken. detected a loop including "' + file + '".'
         end
       }
     }
     # sort
-    return depsHash.keys.sort_by{|f| nameToScore[f]}
+    return files.sort_by{|f| nameToScore[f]}
   end
+
   def scoreFileDfs(file, nameToScore, depsHash)
     return nameToScore[file] if nameToScore.has_key?(file)
     raise 'missing dependency for "' + file + '".' if !depsHash.has_key?(file)
@@ -45,4 +53,6 @@ class SourceFiles
     score = (deps.map{|d| scoreFileDfs(d, nameToScore, depsHash)+1} + [0]).max
     return nameToScore[file] = score;
   end
+  private :scoreFileDfs
+
 end
