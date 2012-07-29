@@ -11,7 +11,7 @@ page.ControlPanel = function(app, dom_helper) {
 
 page.ControlPanel.prototype.init = function() {
   this.run_button = this.dom_helper.get('run');
-  this.dom_helper.setEventListener(
+  this.dom_helper.addEventListener(
     this.run_button, 'click', this, this.onRunButtonClick);
 };
 

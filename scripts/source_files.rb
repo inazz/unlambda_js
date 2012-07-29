@@ -31,6 +31,7 @@ class SourceFiles
         'unlambda/op.js', 'unlambda/variable.js'],
       'tests/unlambda/variable_gjstestequals_test.js' => [
         'unlambda/variable_gjstestequals.js'],
+      'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
     }
   end
   private :getDependencyHash

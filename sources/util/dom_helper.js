@@ -13,7 +13,7 @@ util.DomHelper.prototype.get = function(id) {
 };
 
 // HtmlElement, String, Object, function(Event)
-util.DomHelper.prototype.setEventListener = function(dom, type, obj, func) {
+util.DomHelper.prototype.addEventListener = function(dom, type, obj, func) {
   dom.addEventListener(
     type, function() { return func.apply(obj, arguments);}, true);
 };
