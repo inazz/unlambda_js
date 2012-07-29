@@ -4,9 +4,9 @@ var page = page || {};
 
 // page.App
 // util.DomHelper
-page.OutputPanel = function(app, domHelper) {
+page.OutputPanel = function(app, dom_helper) {
   this.app = app;
-  this.domHelper = domHelper;
+  this.dom_helper = dom_helper;
 };
 
 page.OutputPanel.prototype.init = function() {

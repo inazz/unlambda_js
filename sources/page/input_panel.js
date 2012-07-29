@@ -4,9 +4,9 @@ var page = page || {};
 
 // page.App
 // util.DomHelper
-page.InputPanel = function(app, domHelper) {
+page.InputPanel = function(app, dom_helper) {
   this.app = app;
-  this.domHelper = domHelper;
+  this.dom_helper = dom_helper;
 };
 
 page.InputPanel.prototype.init = function() {

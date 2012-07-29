@@ -4,33 +4,33 @@ var page = page || {};
 
 // util.DomHelper
 // function(page.App, util.DomHelper): page.ControlPanel
-page.App = function(domHelper, panelFactory) {
-  this.domHelper = domHelper;
-  this.controlPanel = panelFactory['control'](this, domHelper);
-  this.codePanel = panelFactory['code'](this, domHelper);
-  this.inputPanel = panelFactory['input'](this, domHelper);
-  this.outputPanel = panelFactory['output'](this, domHelper);
+page.App = function(dom_helper, panel_factory) {
+  this.dom_helper = dom_helper;
+  this.control_panel = panel_factory['control'](this, dom_helper);
+  this.code_panel = panel_factory['code'](this, dom_helper);
+  this.input_panel = panel_factory['input'](this, dom_helper);
+  this.output_panel = panel_factory['output'](this, dom_helper);
 };
 
 // Document
 page.App.create = function(doc){
-  var domHelper = new util.DomHelper(doc);
-  var panelFactory = {
-    'control': function(app, domHelper) {
-      return new page.ControlPanel(app, domHelper);},
-    'code': function(app, domHelper) {
-      return new page.CodePanel(app, domHelper);},
-    'input': function(app, domHelper) {
-      return new page.InputPanel(app, domHelper);},
-    'output': function(app, domHelper) {
-      return new page.OutputPanel(app, domHelper);},
+  var dom_helper = new util.DomHelper(doc);
+  var panel_factory = {
+    'control': function(app, dom_helper) {
+      return new page.ControlPanel(app, dom_helper);},
+    'code': function(app, dom_helper) {
+      return new page.CodePanel(app, dom_helper);},
+    'input': function(app, dom_helper) {
+      return new page.InputPanel(app, dom_helper);},
+    'output': function(app, dom_helper) {
+      return new page.OutputPanel(app, dom_helper);},
   };
-  return new page.App(domHelper, panelFactory);
+  return new page.App(dom_helper, panel_factory);
 }
 
 page.App.prototype.init = function() {
-  this.controlPanel.init();
-  this.codePanel.init();
-  this.inputPanel.init();
-  this.outputPanel.init();
+  this.control_panel.init();
+  this.code_panel.init();
+  this.input_panel.init();
+  this.output_panel.init();
 };

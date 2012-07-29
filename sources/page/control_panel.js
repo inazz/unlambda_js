@@ -3,16 +3,16 @@
 var page = page || {};
 
 // page.App, util.DomHelper
-page.ControlPanel = function(app, domHelper) {
+page.ControlPanel = function(app, dom_helper) {
   this.app = app;
-  this.domHelper = domHelper;
-  this.runButton = null;
+  this.dom_helper = dom_helper;
+  this.run_button = null;
 };
 
 page.ControlPanel.prototype.init = function() {
-  this.runButton = this.domHelper.get('run');
-  this.domHelper.setEventListener(
-    this.runButton, 'click', this, this.onRunButtonClick);
+  this.run_button = this.dom_helper.get('run');
+  this.dom_helper.setEventListener(
+    this.run_button, 'click', this, this.onRunButtonClick);
 };
 
 page.ControlPanel.prototype.onRunButtonClick = function(e) {
