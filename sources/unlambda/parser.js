@@ -106,4 +106,4 @@ unlambda.parser.findEndOfComment = function(code, start, end) {
     }
   }
   return cur;
-}
+};
