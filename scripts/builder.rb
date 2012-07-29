@@ -59,7 +59,7 @@ class Builder
 
   def build()
     buildTarget = 'entry.js'
-    outputFile = 'unlambda.js'
+    outputFile = 'html/unlambda.js'
     sourceFiles = SourceFiles.new
     files = sourceFiles.getOrderedFileList([buildTarget])
     files = ['header.js'] + files

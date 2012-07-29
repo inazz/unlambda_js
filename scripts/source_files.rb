@@ -4,7 +4,7 @@ class SourceFiles
   def getDependencyHash()
     return {
       # build target
-      'entry.js' => ['unlambda/runtime.js'],
+      'entry.js' => ['unlambda/runtime.js', 'page/init.js', 'page/app.js'],
       # unlambda core logics
       'unlambda/op.js' => [],
       'unlambda/parser.js' => ['unlambda/op.js', 'unlambda/variable.js'],
@@ -12,6 +12,14 @@ class SourceFiles
         'unlambda/op.js', 'unlambda/variable.js', 'unlambda/parser.js'],
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
+      # page logics.
+      'page/app.js' => ['page/code_panel.js', 'page/control_panel.js',
+                        'page/input_panel.js', 'page/output_panel.js'],
+      'page/code_panel.js' => [],
+      'page/control_panel.js' => [],
+      'page/input_panel.js' => [],
+      'page/output_panel.js' => [],
+      'page/init.js' => ['page/app.js'],
       # tests
       'tests/unlambda/op_test.js' => ['unlambda/op.js'],
       'tests/unlambda/parser_test.js' => [
