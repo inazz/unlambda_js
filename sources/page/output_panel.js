@@ -2,7 +2,13 @@
 
 var page = page || {};
 
-page.OutputPanel = function(app, doc) {
+// page.App
+// util.DomHelper
+page.OutputPanel = function(app, domHelper) {
   this.app = app;
-  this.doc = doc;
+  this.domHelper = domHelper;
+};
+
+page.OutputPanel.prototype.init = function() {
+  // TODO.
 };

@@ -2,7 +2,19 @@
 
 var page = page || {};
 
-page.ControlPanel = function(app, doc) {
+// page.App, util.DomHelper
+page.ControlPanel = function(app, domHelper) {
   this.app = app;
-  this.doc = doc;
+  this.domHelper = domHelper;
+  this.runButton = null;
+};
+
+page.ControlPanel.prototype.init = function() {
+  this.runButton = this.domHelper.get('run');
+  this.domHelper.setEventListener(
+    this.runButton, 'click', this, this.onRunButtonClick);
+};
+
+page.ControlPanel.prototype.onRunButtonClick = function(e) {
+  // TODO.
 };

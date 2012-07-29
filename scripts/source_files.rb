@@ -15,11 +15,12 @@ class SourceFiles
       # page logics.
       'page/app.js' => ['page/code_panel.js', 'page/control_panel.js',
                         'page/input_panel.js', 'page/output_panel.js'],
-      'page/code_panel.js' => [],
-      'page/control_panel.js' => [],
-      'page/input_panel.js' => [],
-      'page/output_panel.js' => [],
+      'page/code_panel.js' => ['util/dom_helper.js'],
+      'page/control_panel.js' => ['util/dom_helper.js'],
+      'page/input_panel.js' => ['util/dom_helper.js'],
+      'page/output_panel.js' => ['util/dom_helper.js'],
       'page/init.js' => ['page/app.js'],
+      'util/dom_helper.js' => [],
       # tests
       'tests/unlambda/op_test.js' => ['unlambda/op.js'],
       'tests/unlambda/parser_test.js' => [

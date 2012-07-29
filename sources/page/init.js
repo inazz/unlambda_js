@@ -1,5 +1,5 @@
 
-(function(doc) {
-  var app = new page.App(doc);
+window.onload = function() {
+  var app = page.App.create(document);
   app.init();
-})(document);
+};

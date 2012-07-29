@@ -2,7 +2,12 @@
 
 var page = page || {};
 
-page.CodePanel = function(app, doc) {
+// page.App, util.DomHelper
+page.CodePanel = function(app, domHelper) {
   this.app = app;
-  this.doc = doc;
+  this.domHelper = domHelper;
+};
+
+page.CodePanel.prototype.init = function() {
+  // TODO.
 };
