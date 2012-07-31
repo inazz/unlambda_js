@@ -26,7 +26,7 @@ unlambda.parser.ParseContext = function(code) {
 
 
 // code -- string
-// rturn unlambda.parser.Result
+// return unlambda.parser.Result
 unlambda.parser.parse = function(code) {
   var ctx = new unlambda.parser.ParseContext(code);
   this.parse_(ctx);

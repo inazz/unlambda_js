@@ -10,6 +10,7 @@ class SourceFiles
       'unlambda/parser.js' => ['unlambda/op.js', 'unlambda/variable.js'],
       'unlambda/runtime.js' => [
         'unlambda/op.js', 'unlambda/variable.js', 'unlambda/parser.js'],
+      'unlambda/unlambda.js' => ['unlambda/parser.js', 'unlambda/runtime.js'],
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
       # page logics.
@@ -31,6 +32,8 @@ class SourceFiles
         'unlambda/variable_gjstestequals.js', 'unlambda/parser.js'],
       'tests/unlambda/runtime_test.js' => [
         'unlambda/runtime.js', 'unlambda/variable_gjstestequals.js'],
+      'tests/unlambda/unlambda_test.js' => [
+        'unlambda/unlambda.js', 'unlambda/variable_gjstestequals.js'],
       'tests/unlambda/variable_test.js' => [
         'unlambda/op.js', 'unlambda/variable.js'],
       'tests/unlambda/variable_gjstestequals_test.js' => [
