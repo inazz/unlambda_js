@@ -1,10 +1,12 @@
 
 var page = page || {};
 
+// unlambda.Unlambda
 // util.DomHelper
 // page.AppContext
 // function(page.App, util.DomHelper): page.ControlPanel
-page.App = function(dom_helper, app_context, panel_factory) {
+page.App = function(unlambda, dom_helper, app_context, panel_factory) {
+  this.unlambda = unlambda;
   this.dom_helper = dom_helper;
   this.app_context = app_context;
   this.control_panel = panel_factory['control'](this, dom_helper);
@@ -15,6 +17,7 @@ page.App = function(dom_helper, app_context, panel_factory) {
 
 // Document
 page.App.create = function(doc){
+  var unl = new unlambda.Unlambda();
   var dom_helper = new util.DomHelper(doc);
   var app_context = new page.AppContext();
   var panel_factory = {
@@ -27,7 +30,7 @@ page.App.create = function(doc){
     'output': function(app, dom_helper) {
       return new page.OutputPanel(app, dom_helper);},
   };
-  return new page.App(dom_helper, app_context, panel_factory);
+  return new page.App(unl, dom_helper, app_context, panel_factory);
 }
 
 page.App.prototype.init = function() {
@@ -35,6 +38,10 @@ page.App.prototype.init = function() {
   this.code_panel.init();
   this.input_panel.init();
   this.output_panel.init();
+};
+
+page.App.prototype.getUnlambda = function() {
+  return this.unlambda;
 };
 
 page.App.prototype.getAppContext = function() {

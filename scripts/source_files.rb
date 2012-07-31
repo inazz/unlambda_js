@@ -16,7 +16,8 @@ class SourceFiles
       # page logics.
       'page/app.js' => ['page/app_context.js',
                         'page/code_panel.js', 'page/control_panel.js',
-                        'page/input_panel.js', 'page/output_panel.js'],
+                        'page/input_panel.js', 'page/output_panel.js',
+                        'unlambda/unlambda.js'],
       'page/app_context.js' => ['unlambda/runtime.js', 'page/app_state.js'],
       'page/app_state.js' => [],
       'page/code_panel.js' => ['util/dom_helper.js'],

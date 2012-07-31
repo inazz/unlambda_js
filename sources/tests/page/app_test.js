@@ -1,5 +1,6 @@
 
 function PageAppTest() {
+  this.unlambda = {};
   this.dom_helper = {};
   this.app_context = {};
   this.control_panel = {};
@@ -8,7 +9,7 @@ function PageAppTest() {
   this.output_panel = {};
   var that = this;
   this.app = new page.App(
-    this.dom_helper, this.app_context,
+    this.unlambda, this.dom_helper, this.app_context,
     {'control': function(app, dom_helper) { return that.control_panel; },
      'code': function(app, dom_helper) { return that.code_panel; },
      'input': function(app, dom_helper) { return that.input_panel; },
@@ -17,6 +18,7 @@ function PageAppTest() {
 registerTestSuite(PageAppTest);
 
 PageAppTest.prototype.Acessors = function() {
+  expectEq(this.unlambda, this.app.getUnlambda());
   expectEq(this.app_context, this.app.getAppContext());
   expectEq(this.control_panel, this.app.getControlPanel());
   expectEq(this.code_panel, this.app.getCodePanel());
