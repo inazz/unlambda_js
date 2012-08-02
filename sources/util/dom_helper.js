@@ -1,6 +1,6 @@
 
 
-var util = {};
+var util = util || {};
 
 // Document
 util.DomHelper = function(doc) {

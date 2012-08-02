@@ -27,6 +27,7 @@ class SourceFiles
       'page/init.js' => ['page/app.js'],
       # utility.
       'util/dom_helper.js' => [],
+      'util/loop_thread.js' => [],
       # unlambda tests
       'tests/unlambda/op_test.js' => ['unlambda/op.js'],
       'tests/unlambda/parser_test.js' => [
@@ -43,6 +44,7 @@ class SourceFiles
       'tests/page/app_test.js' => ['page/app.js'],
       # utility teests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
+      'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],
     }
   end
   private :getDependencyHash
