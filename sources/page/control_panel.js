@@ -6,15 +6,39 @@ var page = page || {};
 page.ControlPanel = function(app, dom_helper) {
   this.app = app;
   this.dom_helper = dom_helper;
-  this.run_button = null;
+  this.buttons = {};
 };
 
 page.ControlPanel.prototype.init = function() {
-  this.run_button = this.dom_helper.get('run');
+  this.buttons['stop'] = this.dom_helper.get('stop');
+  this.buttons['pause'] = this.dom_helper.get('pause');
+  this.buttons['run'] = this.dom_helper.get('run');
+  this.buttons['run_step'] = this.dom_helper.get('run_step');
+  this.buttons['step'] = this.dom_helper.get('step');
   this.dom_helper.addEventListener(
-    this.run_button, 'click', this, this.onRunButtonClick);
+    this.buttons['stop'], 'click', this, this.onStopButtonClick);
+  this.dom_helper.addEventListener(
+    this.buttons['pause'], 'click', this, this.onPauseButtonClick);
+  this.dom_helper.addEventListener(
+    this.buttons['run'], 'click', this, this.onRunButtonClick);
+  this.dom_helper.addEventListener(
+    this.buttons['run_step'], 'click', this, this.onRunStepButtonClick);
+  this.dom_helper.addEventListener(
+    this.buttons['step'], 'click', this, this.onStepButtonClick);
 };
 
+page.ControlPanel.prototype.onStopButtonClick = function(e) {
+  // TODO.
+};
+page.ControlPanel.prototype.onPauseButtonClick = function(e) {
+  // TODO.
+};
 page.ControlPanel.prototype.onRunButtonClick = function(e) {
+  // TODO.
+};
+page.ControlPanel.prototype.onRunStepButtonClick = function(e) {
+  // TODO.
+};
+page.ControlPanel.prototype.onStepButtonClick = function(e) {
   // TODO.
 };
