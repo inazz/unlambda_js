@@ -2,35 +2,33 @@
 var page = page || {};
 
 // unlambda.Unlambda
-// util.DomHelper
 // page.AppContext
-// function(page.App, util.DomHelper): page.ControlPanel
-page.App = function(unlambda, dom_helper, app_context, panel_factory) {
+// function(page.App): page.ControlPanel
+page.App = function(unlambda, app_context, panel_factory) {
   this.unlambda = unlambda;
-  this.dom_helper = dom_helper;
   this.app_context = app_context;
-  this.control_panel = panel_factory['control'](this, dom_helper);
-  this.code_panel = panel_factory['code'](this, dom_helper);
-  this.input_panel = panel_factory['input'](this, dom_helper);
-  this.output_panel = panel_factory['output'](this, dom_helper);
+  this.control_panel = panel_factory['control'](this);
+  this.code_panel = panel_factory['code'](this);
+  this.input_panel = panel_factory['input'](this);
+  this.output_panel = panel_factory['output'](this);
 };
 
-// Document
+// Window, Document
 page.App.create = function(doc){
   var unl = new unlambda.Unlambda();
   var dom_helper = new util.DomHelper(doc);
   var app_context = new page.AppContext();
   var panel_factory = {
-    'control': function(app, dom_helper) {
+    'control': function(app) {
       return new page.ControlPanel(app, dom_helper);},
-    'code': function(app, dom_helper) {
+    'code': function(app) {
       return new page.CodePanel(app, dom_helper);},
-    'input': function(app, dom_helper) {
+    'input': function(app) {
       return new page.InputPanel(app, dom_helper);},
-    'output': function(app, dom_helper) {
+    'output': function(app) {
       return new page.OutputPanel(app, dom_helper);},
   };
-  return new page.App(unl, dom_helper, app_context, panel_factory);
+  return new page.App(unl, app_context, panel_factory);
 }
 
 page.App.prototype.init = function() {

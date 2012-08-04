@@ -9,11 +9,11 @@ function PageAppTest() {
   this.output_panel = {};
   var that = this;
   this.app = new page.App(
-    this.unlambda, this.dom_helper, this.app_context,
-    {'control': function(app, dom_helper) { return that.control_panel; },
-     'code': function(app, dom_helper) { return that.code_panel; },
-     'input': function(app, dom_helper) { return that.input_panel; },
-     'output': function(app, dom_helper) { return that.output_panel; }});
+    this.unlambda, this.app_context,
+    {'control': function(app) { return that.control_panel; },
+     'code': function(app) { return that.code_panel; },
+     'input': function(app) { return that.input_panel; },
+     'output': function(app) { return that.output_panel; }});
 }
 registerTestSuite(PageAppTest);
 
