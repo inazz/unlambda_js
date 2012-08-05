@@ -15,13 +15,16 @@ class SourceFiles
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
       # app logics.
-      'unlambda_app/app.js' => ['unlambda_app/app_context.js',
+      'unlambda_app/app.js' => [
+        'unlambda_app/app_context.js', 'unlambda_app/controller.js',
         'page/code_panel.js', 'page/control_panel.js',
         'page/input_panel.js', 'page/output_panel.js',
         'unlambda/unlambda.js'],
       'unlambda_app/app_context.js' => [
         'unlambda/runtime.js', 'unlambda_app/app_state.js'],
       'unlambda_app/app_state.js' => [],
+      'unlambda_app/controller.js' => [
+        'unlambda/unlambda.js', 'util/loop_thread_factory.js'],
       'unlambda_app/init.js' => ['unlambda_app/app.js'],
       # page components.
       'page/code_panel.js' => ['util/dom_helper.js'],

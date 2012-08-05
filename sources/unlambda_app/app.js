@@ -1,11 +1,11 @@
 
 var unlambda_app = unlambda_app || {};
 
-// unlambda.Unlambda
+// unlambda_app.Controller
 // unlambda_app.AppContext
 // function(unlambda_app.App): page.ControlPanel
-unlambda_app.App = function(unlambda, app_context, panel_factory) {
-  this.unlambda = unlambda;
+unlambda_app.App = function(controller, app_context, panel_factory) {
+  this.controller = controller
   this.app_context = app_context;
   this.control_panel = panel_factory['control'](this);
   this.code_panel = panel_factory['code'](this);
@@ -14,8 +14,10 @@ unlambda_app.App = function(unlambda, app_context, panel_factory) {
 };
 
 // Window, Document
-unlambda_app.App.create = function(doc){
+unlambda_app.App.create = function(window, doc){
   var unl = new unlambda.Unlambda();
+  var loop_thread_factory = new util.loop_thread_factory(window);
+  var contoller = new unlambda_app.controller(unl, loop_thread_factory);
   var dom_helper = new util.DomHelper(doc);
   var app_context = new unlambda_app.AppContext();
   var panel_factory = {
@@ -32,14 +34,15 @@ unlambda_app.App.create = function(doc){
 }
 
 unlambda_app.App.prototype.init = function() {
+  this.controller.init();
   this.control_panel.init();
   this.code_panel.init();
   this.input_panel.init();
   this.output_panel.init();
 };
 
-unlambda_app.App.prototype.getUnlambda = function() {
-  return this.unlambda;
+unlambda_app.App.prototype.getController = function() {
+  return this.controller;
 };
 
 unlambda_app.App.prototype.getAppContext = function() {

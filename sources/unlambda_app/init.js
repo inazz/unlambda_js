@@ -1,5 +1,5 @@
 
 window.onload = function() {
-  var app = unlambda_app.App.create(document);
+  var app = unlambda_app.App.create(window, document);
   app.init();
 };
