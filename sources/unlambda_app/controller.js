@@ -10,9 +10,22 @@ unlambda_app.Controller = function(unl, loop_thread_factory) {
 
 unlambda_app.Controller.prototype.init = function() {
   var that = this;
-  this.run_thread = loop_thread_factory.create(function() {that.run()});
+  this.run_thread = loop_thread_factory.create(function() {that.run_()});
 };
 
-unlambda_app.Controller.prototype.run = function() {
+unlambda_app.Controller.prototype.run_ = function() {
+  // TODO.
+};
+
+unlambda_app.Controller.prototype.stop = function() {
+  // TODO.
+};
+
+unlambda_app.Controller.prototype.pause = function() {
+  // TODO.
+};
+
+// unlambda_app.RUN_MODE, int
+unlambda_app.Controller.prototype.run = function(mode, limit) {
   // TODO.
 };

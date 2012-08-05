@@ -28,17 +28,18 @@ page.ControlPanel.prototype.init = function() {
 };
 
 page.ControlPanel.prototype.onStopButtonClick = function(e) {
-  // TODO.
+  this.app.getController().stop();
 };
 page.ControlPanel.prototype.onPauseButtonClick = function(e) {
-  // TODO.
+  this.app.getController().pause();
 };
 page.ControlPanel.prototype.onRunButtonClick = function(e) {
-  // TODO.
+  this.app.getController().run(unlambda_app.RUN_MODE.RUN, -1);
 };
 page.ControlPanel.prototype.onRunStepButtonClick = function(e) {
-  // TODO.
+  this.app.getController().run(unlambda_app.RUN_MODE.RUN_STEP, -1);
 };
 page.ControlPanel.prototype.onStepButtonClick = function(e) {
-  // TODO.
+  this.app.getController().run(unlambda_app.RUN_MODE.RUN,
+                               this.app.getAppContext().getCurrentStep() + 1);
 };

@@ -26,6 +26,7 @@ class SourceFiles
       'unlambda_app/controller.js' => [
         'unlambda/unlambda.js', 'util/loop_thread_factory.js'],
       'unlambda_app/init.js' => ['unlambda_app/app.js'],
+      'unlambda_app/mock_app.js' => ['unlambda_app/app.js'],
       'unlambda_app/run_mode.js' => [],
       'unlambda_app/run_state.js' => [],
       # page components.
@@ -53,7 +54,10 @@ class SourceFiles
       'tests/unlambda_app/app_test.js' => ['unlambda_app/app.js'],
       'tests/unlambda_app/app_context_test.js' => [
         'unlambda_app/app_context.js'],
-      # utility teests.
+      # page component tests.
+      'tests/page/control_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/control_panel.js'],
+      # utility tests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],
       'tests/util/loop_thread_factory_test.js' => [

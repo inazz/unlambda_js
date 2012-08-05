@@ -17,7 +17,7 @@ unlambda_app.App = function(controller, app_context, panel_factory) {
 unlambda_app.App.create = function(window, doc){
   var unl = new unlambda.Unlambda();
   var loop_thread_factory = new util.LoopThreadFactory(window);
-  var contoller = new unlambda_app.Controller(unl, loop_thread_factory);
+  var controller = new unlambda_app.Controller(unl, loop_thread_factory);
   var dom_helper = new util.DomHelper(doc);
   var app_context = new unlambda_app.AppContext();
   var panel_factory = {
@@ -30,7 +30,7 @@ unlambda_app.App.create = function(window, doc){
     'output': function(app) {
       return new page.OutputPanel(app, dom_helper);},
   };
-  return new unlambda_app.App(unl, app_context, panel_factory);
+  return new unlambda_app.App(controller, app_context, panel_factory);
 }
 
 unlambda_app.App.prototype.init = function() {
