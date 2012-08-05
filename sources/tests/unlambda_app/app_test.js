@@ -9,7 +9,8 @@ function UnlambdaAppTest() {
 
   var that = this;
   this.app = new unlambda_app.App(
-    this.controller, this.app_context,
+    function(app) { return that.controller; },
+    this.app_context,
     {'control': function(app) { return that.control_panel; },
      'code': function(app) { return that.code_panel; },
      'input': function(app) { return that.input_panel; },

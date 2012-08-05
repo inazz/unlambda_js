@@ -1,11 +1,11 @@
 
 var unlambda_app = unlambda_app || {};
 
-// unlambda_app.Controller
+// function(unlambda_app.App): unlambda_app.Controller
 // unlambda_app.AppContext
-// function(unlambda_app.App): page.ControlPanel
-unlambda_app.App = function(controller, app_context, panel_factory) {
-  this.controller = controller
+// array of function(unlambda_app.App): page.*Panel
+unlambda_app.App = function(controller_factory, app_context, panel_factory) {
+  this.controller = controller_factory(this);
   this.app_context = app_context;
   this.control_panel = panel_factory['control'](this);
   this.code_panel = panel_factory['code'](this);
@@ -17,7 +17,9 @@ unlambda_app.App = function(controller, app_context, panel_factory) {
 unlambda_app.App.create = function(window, doc){
   var unl = new unlambda.Unlambda();
   var loop_thread_factory = new util.LoopThreadFactory(window);
-  var controller = new unlambda_app.Controller(unl, loop_thread_factory);
+  var controller_factory = function(app) {
+    return new unlambda_app.Controller(app, unl, loop_thread_factory);
+  };
   var dom_helper = new util.DomHelper(doc);
   var app_context = new unlambda_app.AppContext();
   var panel_factory = {
@@ -30,7 +32,7 @@ unlambda_app.App.create = function(window, doc){
     'output': function(app) {
       return new page.OutputPanel(app, dom_helper);},
   };
-  return new unlambda_app.App(controller, app_context, panel_factory);
+  return new unlambda_app.App(controller_factory, app_context, panel_factory);
 }
 
 unlambda_app.App.prototype.init = function() {
