@@ -21,11 +21,13 @@ class SourceFiles
         'page/input_panel.js', 'page/output_panel.js',
         'unlambda/unlambda.js'],
       'unlambda_app/app_context.js' => [
-        'unlambda/runtime.js', 'unlambda_app/app_state.js'],
-      'unlambda_app/app_state.js' => [],
+        'unlambda/runtime.js',
+        'unlambda_app/run_mode.js', 'unlambda_app/run_state.js'],
       'unlambda_app/controller.js' => [
         'unlambda/unlambda.js', 'util/loop_thread_factory.js'],
       'unlambda_app/init.js' => ['unlambda_app/app.js'],
+      'unlambda_app/run_mode.js' => [],
+      'unlambda_app/run_state.js' => [],
       # page components.
       'page/code_panel.js' => ['util/dom_helper.js'],
       'page/control_panel.js' => ['util/dom_helper.js'],
