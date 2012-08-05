@@ -7,3 +7,10 @@ unlambda_app.AppContext = function() {
   this.step_limit = -1;
   this.runtime_context = null; // unlambda.runtime.RuntimeContext
 };
+
+unlambda_app.AppContext.prototype.getCurrentStep = function() {
+  if (this.runtime_context == null) {
+    return 0;
+  }
+  return this.runtime_context.step;
+};

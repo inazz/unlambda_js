@@ -51,6 +51,8 @@ class SourceFiles
         'unlambda/variable_gjstestequals.js'],
       # app logics tests.
       'tests/unlambda_app/app_test.js' => ['unlambda_app/app.js'],
+      'tests/unlambda_app/app_context_test.js' => [
+        'unlambda_app/app_context.js'],
       # utility teests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],
