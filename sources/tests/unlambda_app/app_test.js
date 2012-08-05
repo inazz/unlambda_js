@@ -1,5 +1,5 @@
 
-function PageAppTest() {
+function UnlambdaAppTest() {
   this.controller = createMockInstance(unlambda_app.Controller);
   this.app_context = createMockInstance(unlambda_app.AppContext);
   this.control_panel = createMockInstance(page.ControlPanel);
@@ -15,9 +15,9 @@ function PageAppTest() {
      'input': function(app) { return that.input_panel; },
      'output': function(app) { return that.output_panel; }});
 }
-registerTestSuite(PageAppTest);
+registerTestSuite(UnlambdaAppTest);
 
-PageAppTest.prototype.Acessors = function() {
+UnlambdaAppTest.prototype.Acessors = function() {
   expectEq(this.controller, this.app.getController());
   expectEq(this.app_context, this.app.getAppContext());
   expectEq(this.control_panel, this.app.getControlPanel());
@@ -26,7 +26,12 @@ PageAppTest.prototype.Acessors = function() {
   expectEq(this.output_panel, this.app.getOutputPanel());
 };
 
-PageAppTest.prototype.Init = function() {
+UnlambdaAppTest.prototype.CreateDoDIWithoutCallingAnyMethod = function() {
+  var window = {}, document = {};
+  unlambda_app.App.create(window, document);
+};
+
+UnlambdaAppTest.prototype.Init = function() {
   expectCall(this.controller.init)();
   expectCall(this.control_panel.init)();
   expectCall(this.code_panel.init)();

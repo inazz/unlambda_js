@@ -16,8 +16,8 @@ unlambda_app.App = function(controller, app_context, panel_factory) {
 // Window, Document
 unlambda_app.App.create = function(window, doc){
   var unl = new unlambda.Unlambda();
-  var loop_thread_factory = new util.loop_thread_factory(window);
-  var contoller = new unlambda_app.controller(unl, loop_thread_factory);
+  var loop_thread_factory = new util.LoopThreadFactory(window);
+  var contoller = new unlambda_app.Controller(unl, loop_thread_factory);
   var dom_helper = new util.DomHelper(doc);
   var app_context = new unlambda_app.AppContext();
   var panel_factory = {
