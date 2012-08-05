@@ -8,7 +8,7 @@ function PageAppTest() {
   this.input_panel = {};
   this.output_panel = {};
   var that = this;
-  this.app = new page.App(
+  this.app = new unlambda_app.App(
     this.unlambda, this.app_context,
     {'control': function(app) { return that.control_panel; },
      'code': function(app) { return that.code_panel; },

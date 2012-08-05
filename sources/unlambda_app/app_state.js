@@ -1,7 +1,7 @@
 
-var page = page || {};
+var unlambda_app = unlambda_app || {};
 
-page.APP_STATE = {
+unlambda_app.APP_STATE = {
   STOPPED: 0,
   PAUSED: 1,
   RUNNING: 2,

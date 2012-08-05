@@ -4,7 +4,8 @@ class SourceFiles
   def getDependencyHash()
     return {
       # build target
-      'entry.js' => ['unlambda/runtime.js', 'page/init.js', 'page/app.js'],
+      'entry.js' => ['unlambda/runtime.js',
+        'unlambda_app/init.js', 'unlambda_app/app.js'],
       # unlambda core logics
       'unlambda/op.js' => [],
       'unlambda/parser.js' => ['unlambda/op.js', 'unlambda/variable.js'],
@@ -13,18 +14,20 @@ class SourceFiles
       'unlambda/unlambda.js' => ['unlambda/parser.js', 'unlambda/runtime.js'],
       'unlambda/variable.js' => ['unlambda/op.js'],
       'unlambda/variable_gjstestequals.js' => ['unlambda/variable.js'],
-      # page logics.
-      'page/app.js' => ['page/app_context.js',
-                        'page/code_panel.js', 'page/control_panel.js',
-                        'page/input_panel.js', 'page/output_panel.js',
-                        'unlambda/unlambda.js'],
-      'page/app_context.js' => ['unlambda/runtime.js', 'page/app_state.js'],
-      'page/app_state.js' => [],
+      # app logics.
+      'unlambda_app/app.js' => ['unlambda_app/app_context.js',
+        'page/code_panel.js', 'page/control_panel.js',
+        'page/input_panel.js', 'page/output_panel.js',
+        'unlambda/unlambda.js'],
+      'unlambda_app/app_context.js' => [
+        'unlambda/runtime.js', 'unlambda_app/app_state.js'],
+      'unlambda_app/app_state.js' => [],
+      'unlambda_app/init.js' => ['unlambda_app/app.js'],
+      # page components.
       'page/code_panel.js' => ['util/dom_helper.js'],
       'page/control_panel.js' => ['util/dom_helper.js'],
       'page/input_panel.js' => ['util/dom_helper.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
-      'page/init.js' => ['page/app.js'],
       # utility.
       'util/dom_helper.js' => [],
       'util/loop_thread.js' => [],
@@ -41,8 +44,8 @@ class SourceFiles
         'unlambda/op.js', 'unlambda/variable.js'],
       'tests/unlambda/variable_gjstestequals_test.js' => [
         'unlambda/variable_gjstestequals.js'],
-      # page tests.
-      'tests/page/app_test.js' => ['page/app.js'],
+      # app logics tests.
+      'tests/unlambda_app/app_test.js' => ['unlambda_app/app.js'],
       # utility teests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],

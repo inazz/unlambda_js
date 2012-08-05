@@ -2,7 +2,7 @@
 
 var page = page || {};
 
-// page.App
+// unlambda_app.App
 // util.DomHelper
 page.InputPanel = function(app, dom_helper) {
   this.app = app;
