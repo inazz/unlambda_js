@@ -50,3 +50,12 @@ util.DomHelper.prototype.removeChildren = function(dom) {
     dom.removeChild(dom.firstChild);
   }
 };
+
+// HtmlElement
+util.DomHelper.prototype.addClass = function(dom, str) {
+  var cls = dom.className || "";
+  if (cls.length != 0) {
+    cls += " ";
+  }
+  dom.className =  cls + str;
+};

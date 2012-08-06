@@ -91,3 +91,10 @@ UtilDomHelperTest.prototype.RemoveChildren = function() {
   expectEq(0, children.length);
 };
 
+UtilDomHelperTest.prototype.AddClass = function() {
+  var dom = {}
+  this.dom_helper.addClass(dom, 'hoge');
+  expectEq('hoge', dom.className);
+  this.dom_helper.addClass(dom, 'fuga');
+  expectEq('hoge fuga', dom.className);
+};
