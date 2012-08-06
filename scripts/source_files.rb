@@ -59,6 +59,8 @@ class SourceFiles
       # page component tests.
       'tests/page/control_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/control_panel.js'],
+      'tests/page/output_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/output_panel.js'],
       # utility tests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],

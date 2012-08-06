@@ -1,2 +1,10 @@
 
-// nothing for now.
+code.error_snippet {
+  background-color: #cccccc;
+	display: block;
+	white-space: pre;
+}
+
+span.error_code {
+  background-color: #ffcccc;
+}
