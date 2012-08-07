@@ -23,17 +23,47 @@ unlambda_app.Controller.prototype.run_ = function() {
 };
 
 unlambda_app.Controller.prototype.stop = function() {
-  // TODO.
+  var ctx = this.app.getAppContext();
+  ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
+  ctx.run_mode = null;
+  ctx.runtime_context = null;
+  this.updateView();
 };
 
 unlambda_app.Controller.prototype.pause = function() {
-  // TODO.
+  var ctx = this.app.getAppContext();
+  if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
+    return;
+  }
+  ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+  this.updateView();
 };
 
 // unlambda_app.RUN_MODE, int
 // -1 for limit to indicate run infinately.
 unlambda_app.Controller.prototype.run = function(mode, limit) {
-  // TODO.
+  var ctx = this.app.getAppContext();
+  var ok = true;
+  if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
+    var code = this.app.getCodePanel().getCode();
+    var parse_result = this.unl.parse(code);
+    if (!parse_result.success) {
+      this.app.getOutputPanel().setCompileError(
+        code, parse_result.error, parse_result.error_pos);
+      ok = false;
+    } else {
+      this.app.getOutputPanel().clear();
+      ctx.runtime_context = this.unl.newContext(
+        parse_result.variable, this.input_callback, this.output_callback);
+    }
+  }
+  if (ok) {
+    ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+    ctx.run_mode = mode;
+    ctx.step_limit = limit;
+    this.run_thread.run();
+  }
+  this.updateView();
 };
 
 unlambda_app.Controller.prototype.onUnlambdaInput = function() {
@@ -42,4 +72,8 @@ unlambda_app.Controller.prototype.onUnlambdaInput = function() {
 };
 unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
   this.app.getOutputPanel().appendOutput(c);
+};
+
+unlambda_app.Controller.prototype.updateView = function() {
+  // TODO.
 };
