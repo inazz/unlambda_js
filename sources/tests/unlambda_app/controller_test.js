@@ -9,6 +9,12 @@ function UnlambdaAppControllerTest() {
 }
 registerTestSuite(UnlambdaAppControllerTest);
 
+UnlambdaAppControllerTest.expectUpdateView = function(test) {
+  test.controller.updateView = createMockFunction();
+  expectCall(test.controller.updateView)();
+};
+
+
 UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   var loop_func;
   expectCall(this.loop_thread_factory.create)(_).willOnce(
@@ -28,7 +34,6 @@ UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   this.controller.onUnlambdaOutput = createMockFunction();
   expectCall(this.controller.onUnlambdaOutput)(c);
   this.controller.output_callback(c);
-
 };
 
 UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = function() {
@@ -38,9 +43,7 @@ UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = func
 };
 
 UnlambdaAppControllerTest.prototype.Stop = function() {
-  this.controller.updateView = createMockFunction();
-  expectCall(this.controller.updateView)();
-
+  UnlambdaAppControllerTest.expectUpdateView(this);
   this.controller.stop();
   var ctx = this.app.getAppContext();
   expectEq(unlambda_app.RUN_STATE.STOPPED, ctx.run_state);
@@ -48,12 +51,11 @@ UnlambdaAppControllerTest.prototype.Stop = function() {
 };
 
 UnlambdaAppControllerTest.prototype.PauseKeepRuntimeContext = function() {
-  this.controller.updateView = createMockFunction();
-  expectCall(this.controller.updateView)();
   var ctx = this.app.getAppContext();
   ctx.run_state = unlambda_app.RUN_STATE.RUN;
   var original_runtime_context = {};
   ctx.runtime_context = original_runtime_context;
+  UnlambdaAppControllerTest.expectUpdateView(this);
 
   this.controller.pause();
   expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
@@ -62,13 +64,12 @@ UnlambdaAppControllerTest.prototype.PauseKeepRuntimeContext = function() {
 
 UnlambdaAppControllerTest.prototype.RunResumeThreadWithParamIfNotStopped = function() {
   this.controller.run_thread = createMockInstance(util.LoopThread);
-  this.controller.updateView = createMockFunction();
   expectCall(this.controller.run_thread.run)();
-  expectCall(this.controller.updateView)();
   var ctx = this.app.getAppContext();
   ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
   ctx.run_mode = unlambda_app.RUN_MODE.RUN;
   ctx.step_limit = 100;
+  UnlambdaAppControllerTest.expectUpdateView(this);
 
   this.controller.run(unlambda_app.RUN_MODE.RUN_STEP, 111);
   expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
@@ -88,8 +89,7 @@ UnlambdaAppControllerTest.prototype.RunShowCompileError = function() {
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
   expectCall(this.app.output_panel.setCompileError)(
     code, unlambda.parser.ERROR.EXTRA_CHARACTER, 5);
-  this.controller.updateView = createMockFunction();
-  expectCall(this.controller.updateView)();
+  UnlambdaAppControllerTest.expectUpdateView(this);
 
   this.controller.run(unlambda_app.RUN_MODE.RUN, -1);
   expectEq(unlambda_app.RUN_STATE.STOPPED, ctx.run_state);
@@ -104,7 +104,6 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
   parse_result.variable = createMockInstance(unlambda.Variable);
   var runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
   this.controller.run_thread = createMockInstance(util.LoopThread);
-  this.controller.updateView = createMockFunction();
 
   expectCall(this.app.code_panel.getCode)().willOnce(returnWith(code));
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
@@ -114,11 +113,146 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
     .willOnce(returnWith(runtime_context));
   expectCall(this.controller.run_thread.run)();
   expectCall(this.app.output_panel.clear)();
-  expectCall(this.controller.updateView)();
+  UnlambdaAppControllerTest.expectUpdateView(this);
 
   this.controller.run(unlambda_app.RUN_MODE.RUN_STEP, 100);
   expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
   expectEq(unlambda_app.RUN_MODE.RUN_STEP, ctx.run_mode);
   expectEq(100, ctx.step_limit);
   expectEq(runtime_context, ctx.runtime_context);
+};
+
+UnlambdaAppControllerTest.prototype.SetUpRuntimeStep = function() {
+  var ctx = this.app.getAppContext();
+  var max_step = unlambda_app.Controller.MAX_BURST_STEP;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 100;
+
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN;
+  ctx.step_limit = 100;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(100, ctx.runtime_context.step_limit);
+
+  ctx.step_limit = 100 + max_step - 1;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(100 + max_step - 1, ctx.runtime_context.step_limit);
+
+  ctx.step_limit = 100 + max_step + 1;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(100 + max_step, ctx.runtime_context.step_limit);
+
+  ctx.step_limit = -1;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(100 + max_step, ctx.runtime_context.step_limit);
+
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN_STEP;
+  ctx.step_limit = 100;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(100, ctx.runtime_context.step_limit);
+
+  ctx.step_limit = 102;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(101, ctx.runtime_context.step_limit);
+
+  ctx.step_limit = -1;
+  this.controller.setUpRuntimeStepLimit(ctx);
+  expectEq(101, ctx.runtime_context.step_limit);
+};
+
+UnlambdaAppControllerTest.prototype.Run_StopsIfNotRunning = function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = -1;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+
+  ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
+  expectFalse(this.controller.run_());
+
+  ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+  expectFalse(this.controller.run_());
+
+  ctx.run_state = unlambda_app.RUN_STATE.INPUT_WAIT;
+  expectFalse(this.controller.run_());
+};
+
+UnlambdaAppControllerTest.prototype.Run_StopsIfExited= function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = 1;
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 0;
+  ctx.runtime_context.step_limit = 1;
+  UnlambdaAppControllerTest.expectUpdateView(this);
+
+  expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
+    ctx.state = unlambda.runtime.STATE.EXITED;});
+  expectFalse(this.controller.run_());
+  expectEq(unlambda_app.RUN_STATE.STOPPED, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.Run_WaitInputIfInputBlocks = function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = 1;
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 0;
+  ctx.runtime_context.step_limit = 1;
+  UnlambdaAppControllerTest.expectUpdateView(this);
+
+  expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
+    ctx.state = unlambda.runtime.STATE.INPUT_WAIT;});
+  expectFalse(this.controller.run_());
+  expectEq(unlambda_app.RUN_STATE.INPUT_WAIT, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.Run_PausesIfStepLimit = function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = 1;
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 0;
+  ctx.runtime_context.step_limit = 1;
+  UnlambdaAppControllerTest.expectUpdateView(this);
+
+  expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
+    ctx.state = unlambda.runtime.STATE.STEP_LIMIT;
+    ctx.step = 1;});
+  expectFalse(this.controller.run_());
+  expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
+};
+
+
+UnlambdaAppControllerTest.prototype.Run_KeepRunStepIfStilRemainingStep = function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = 2;
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN_STEP;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 0;
+  ctx.runtime_context.step_limit = 1;
+  UnlambdaAppControllerTest.expectUpdateView(this);
+
+  expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
+    ctx.state = unlambda.runtime.STATE.STEP_LIMIT;
+    ctx.step = 1;});
+  expectTrue(this.controller.run_());
+  expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak = function() {
+  var ctx = this.app.getAppContext();
+  ctx.step_limit = -1;
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.run_mode = unlambda_app.RUN_MODE.RUN;
+  ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.runtime_context.step = 0;
+  ctx.runtime_context.step_limit = unlambda_app.Controller.MAX_BURST_STEP;;
+
+  expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
+    ctx.state = unlambda.runtime.STATE.STEP_LIMIT;
+    ctx.step = unlambda_app.Controller.MAX_BURST_STEP;;});
+  expectTrue(this.controller.run_());
+  expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
 };

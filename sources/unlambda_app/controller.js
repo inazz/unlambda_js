@@ -11,6 +11,8 @@ unlambda_app.Controller = function(app, unl, loop_thread_factory) {
   this.output_callback = null;
 };
 
+unlambda_app.Controller.MAX_BURST_STEP = 5000;
+
 unlambda_app.Controller.prototype.init = function() {
   var that = this;
   this.run_thread = this.loop_thread_factory.create(function() {that.run_()});
@@ -19,7 +21,52 @@ unlambda_app.Controller.prototype.init = function() {
 };
 
 unlambda_app.Controller.prototype.run_ = function() {
-  // TODO.
+  var ctx = this.app.getAppContext();
+  if (ctx.run_state != unlambda_app.RUN_STATE.RUNNING) {
+    return false;
+  }
+  this.setUpRuntimeStepLimit(ctx);
+  this.unl.run(ctx.runtime_context);
+  switch (ctx.runtime_context.state) {
+  case unlambda.runtime.STATE.EXITED:
+    ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
+    this.updateView();
+    return false;
+  case unlambda.runtime.STATE.INPUT_WAIT:
+    ctx.run_state = unlambda_app.RUN_STATE.INPUT_WAIT;
+    this.updateView();
+    return false;
+  case unlambda.runtime.STATE.STEP_LIMIT:
+    if (ctx.getCurrentStep() == ctx.step_limit) {
+      ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+      this.updateView();
+      return false;
+    } else if (ctx.run_mode == unlambda_app.RUN_MODE.RUN_STEP){
+      this.updateView();
+    }
+    return true;
+  default:
+    throw 'unexpected runtime result!';
+  }
+};
+
+unlambda_app.Controller.prototype.setUpRuntimeStepLimit = function(ctx) {
+  var cur_step = ctx.getCurrentStep();
+  if (ctx.run_mode == unlambda_app.RUN_MODE.RUN_STEP) {
+    if (cur_step == ctx.step_limit) {
+      ctx.runtime_context.step_limit = cur_step;
+    } else {
+      ctx.runtime_context.step_limit = cur_step + 1;
+    }
+  } else {
+    if (ctx.step_limit == -1) {
+      ctx.runtime_context.step_limit =
+        cur_step + unlambda_app.Controller.MAX_BURST_STEP;
+    } else {
+      ctx.runtime_context.step_limit = Math.min(
+        ctx.step_limit, cur_step + unlambda_app.Controller.MAX_BURST_STEP);
+    }
+  }
 };
 
 unlambda_app.Controller.prototype.stop = function() {
