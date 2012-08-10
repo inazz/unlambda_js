@@ -98,3 +98,11 @@ UtilDomHelperTest.prototype.AddClass = function() {
   this.dom_helper.addClass(dom, 'fuga');
   expectEq('hoge fuga', dom.className);
 };
+
+UtilDomHelperTest.prototype.Enable = function() {
+  var dom = {}
+  this.dom_helper.enable(dom, false);
+  expectTrue(dom.disabled);
+  this.dom_helper.enable(dom, true);
+  expectFalse(dom.disabled);
+};

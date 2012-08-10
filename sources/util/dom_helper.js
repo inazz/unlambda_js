@@ -59,3 +59,8 @@ util.DomHelper.prototype.addClass = function(dom, str) {
   }
   dom.className =  cls + str;
 };
+
+// HtmlElement, boolean
+util.DomHelper.prototype.enable = function(dom, flag) {
+  dom.disabled = !flag;
+};
