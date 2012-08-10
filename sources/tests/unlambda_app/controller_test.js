@@ -128,6 +128,7 @@ UnlambdaAppControllerTest.prototype.SetUpRuntimeStep = function() {
   ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
   ctx.runtime_context.step = 100;
 
+  ctx.run_state = unlambda_app.RUN_MODE.RUNNING;
   ctx.run_mode = unlambda_app.RUN_MODE.RUN;
   ctx.step_limit = 100;
   this.controller.setUpRuntimeStepLimit(ctx);

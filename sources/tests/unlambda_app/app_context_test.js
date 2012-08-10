@@ -5,9 +5,15 @@ function UnlambdaAppAppContextTest() {
 registerTestSuite(UnlambdaAppAppContextTest);
 
 UnlambdaAppAppContextTest.prototype.GetCurrentStep = function() {
-  expectEq(0, this.ctx.getCurrentStep());
-
+  this.ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
   this.ctx.runtime_context = {};
   this.ctx.runtime_context.step = 20;
   expectEq(20, this.ctx.getCurrentStep());
+};
+
+UnlambdaAppAppContextTest.prototype.GetCurrentStepWhenStopped = function() {
+  this.ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
+  this.ctx.runtime_context = {};
+  this.ctx.runtime_context.step = 20;
+  expectEq(0, this.ctx.getCurrentStep());
 };

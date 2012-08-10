@@ -9,7 +9,7 @@ unlambda_app.AppContext = function() {
 };
 
 unlambda_app.AppContext.prototype.getCurrentStep = function() {
-  if (this.runtime_context == null) {
+  if (this.run_state == unlambda_app.RUN_STATE.STOPPED) {
     return 0;
   }
   return this.runtime_context.step;
