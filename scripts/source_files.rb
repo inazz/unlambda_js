@@ -57,6 +57,8 @@ class SourceFiles
       'tests/unlambda_app/controller_test.js' => [
         'unlambda_app/mock_app.js', 'unlambda_app/controller.js' ],
       # page component tests.
+      'tests/page/code_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/code_panel.js'],
       'tests/page/control_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/control_panel.js'],
       'tests/page/output_panel_test.js' => ['unlambda_app/mock_app.js',

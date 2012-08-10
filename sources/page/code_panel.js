@@ -16,3 +16,12 @@ page.CodePanel.prototype.init = function() {
 page.CodePanel.prototype.getCode = function() {
   return this.dom_helper.getValue(this.code_area);
 };
+
+page.CodePanel.prototype.updateView = function() {
+  var ctx = this.app.getAppContext();
+  if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
+    this.dom_helper.enable(this.code_area, true);
+  } else {
+    this.dom_helper.enable(this.code_area, false);
+  }
+};
