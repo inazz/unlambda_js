@@ -13,6 +13,10 @@ UnlambdaAppControllerTest.expectUpdateView = function(test) {
   test.controller.updateView = createMockFunction();
   expectCall(test.controller.updateView)();
 };
+UnlambdaAppControllerTest.expectThreadRun = function(test) {
+  test.controller.run_thread = createMockInstance(util.LoopThread);
+  expectCall(test.controller.run_thread.run)();
+};
 
 
 UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
@@ -34,6 +38,23 @@ UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   this.controller.onUnlambdaOutput = createMockFunction();
   expectCall(this.controller.onUnlambdaOutput)(c);
   this.controller.output_callback(c);
+};
+
+UnlambdaAppControllerTest.prototype.OnInputChangeRunThreadWhenWaitingInput = function() {
+  var ctx = this.app.getAppContext();
+  ctx.run_state = unlambda_app.RUN_STATE.INPUT_WAIT;
+
+  UnlambdaAppControllerTest.expectThreadRun(this);
+  this.controller.onInputChange();
+  expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.OnInputChangeDoNothingWhenNotWaiting = function() {
+  var ctx = this.app.getAppContext();
+  ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+
+  this.controller.onInputChange();
+  expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
 };
 
 UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = function() {
@@ -63,8 +84,7 @@ UnlambdaAppControllerTest.prototype.PauseKeepRuntimeContext = function() {
 };
 
 UnlambdaAppControllerTest.prototype.RunResumeThreadWithParamIfNotStopped = function() {
-  this.controller.run_thread = createMockInstance(util.LoopThread);
-  expectCall(this.controller.run_thread.run)();
+  UnlambdaAppControllerTest.expectThreadRun(this);
   var ctx = this.app.getAppContext();
   ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
   ctx.run_mode = unlambda_app.RUN_MODE.RUN;
@@ -103,7 +123,6 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
   parse_result.success = true;
   parse_result.variable = createMockInstance(unlambda.Variable);
   var runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
-  this.controller.run_thread = createMockInstance(util.LoopThread);
 
   expectCall(this.app.code_panel.getCode)().willOnce(returnWith(code));
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
@@ -111,8 +130,8 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
     parse_result.variable, this.controller.input_callback,
     this.controller.output_callback)
     .willOnce(returnWith(runtime_context));
-  expectCall(this.controller.run_thread.run)();
   expectCall(this.app.output_panel.clear)();
+  UnlambdaAppControllerTest.expectThreadRun(this);
   UnlambdaAppControllerTest.expectUpdateView(this);
 
   this.controller.run(unlambda_app.RUN_MODE.RUN_STEP, 100);
@@ -256,4 +275,11 @@ UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak =
     ctx.step = unlambda_app.Controller.MAX_BURST_STEP;;});
   expectTrue(this.controller.run_());
   expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.UpdateView = function() {
+  expectCall(this.app.getControlPanel().updateView)();
+  expectCall(this.app.getCodePanel().updateView)();
+
+  this.controller.updateView();
 };

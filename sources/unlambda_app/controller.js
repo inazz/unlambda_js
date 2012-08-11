@@ -114,6 +114,14 @@ unlambda_app.Controller.prototype.run = function(mode, limit) {
   this.updateView();
 };
 
+unlambda_app.Controller.prototype.onInputChange = function() {
+  var ctx = this.app.getAppContext();
+  if (ctx.run_state == unlambda_app.RUN_STATE.INPUT_WAIT) {
+    ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+    this.run_thread.run();
+  }
+};
+
 unlambda_app.Controller.prototype.onUnlambdaInput = function() {
   // TODO.
   return -1;
@@ -123,5 +131,6 @@ unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
 };
 
 unlambda_app.Controller.prototype.updateView = function() {
-  // TODO.
+  this.app.getControlPanel().updateView();
+  this.app.getCodePanel().updateView();
 };
