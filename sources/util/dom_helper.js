@@ -64,3 +64,8 @@ util.DomHelper.prototype.addClass = function(dom, str) {
 util.DomHelper.prototype.enable = function(dom, flag) {
   dom.disabled = !flag;
 };
+
+// HtmlElement
+util.DomHelper.prototype.isChecked = function(dom) {
+  return !!dom.checked
+};

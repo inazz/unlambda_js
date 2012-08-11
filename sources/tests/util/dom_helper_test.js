@@ -106,3 +106,14 @@ UtilDomHelperTest.prototype.Enable = function() {
   this.dom_helper.enable(dom, true);
   expectFalse(dom.disabled);
 };
+
+UtilDomHelperTest.prototype.IsChecked = function() {
+  var dom = {}
+  expectFalse(this.dom_helper.isChecked(dom));
+  dom.checked = false;
+  expectFalse(this.dom_helper.isChecked(dom));
+  dom.checked = true;
+  expectTrue(this.dom_helper.isChecked(dom));
+  dom.checked = "checked";
+  expectTrue(this.dom_helper.isChecked(dom));
+};
