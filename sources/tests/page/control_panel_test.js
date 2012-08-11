@@ -4,6 +4,8 @@ function PageControlPanelTest() {
   this.dom_helper = createMockInstance(util.DomHelper);
   this.panel = new page.ControlPanel(this.app, this.dom_helper);
   this.app.control_panel = this.panel;
+  this.panel.buttons = {
+    'stop': {}, 'pause': {}, 'run': {}, 'run_step': {}, 'step': {}};
 }
 registerTestSuite(PageControlPanelTest);
 
@@ -31,32 +33,77 @@ PageControlPanelTest.prototype.initSetUpStopButtonHandler = function() {
 };
 
 PageControlPanelTest.prototype.onStopButtonClickCallController = function() {
-  expectCall(this.app.controller.stop)();
+  var panel = this.panel;
+  // make sure the last_licked_name property changed before calling controller.
+  // becuase controller may call updateView.
+  expectCall(this.app.controller.stop)().willOnce(
+    function() {expectEq('stop', panel.last_clicked_name);});
   var ev = {};
   this.panel.onStopButtonClick(ev);
 };
 PageControlPanelTest.prototype.onPauseButtonClickCallController = function() {
-  expectCall(this.app.controller.pause)();
+  var panel = this.panel;
+  expectCall(this.app.controller.pause)().willOnce(
+    function() {expectEq('pause', panel.last_clicked_name);});
   var ev = {};
   this.panel.onPauseButtonClick(ev);
 };
 
 PageControlPanelTest.prototype.onRunButtonClickCallController = function(e) {
-  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, -1);
+  var panel = this.panel;
+  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, -1).willOnce(
+    function() {expectEq('run', panel.last_clicked_name);});
   var ev = {};
   this.panel.onRunButtonClick(ev);
 };
 
 PageControlPanelTest.prototype.onRunStepButtonClickCallController = function(e) {
-  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN_STEP, -1);
+  var panel = this.panel;
+  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN_STEP, -1)
+    .willOnce(function() {expectEq('run_step', panel.last_clicked_name);});
   var ev = {};
   this.panel.onRunStepButtonClick(ev);
 };
 
 PageControlPanelTest.prototype.onStepButtonClickCallControllerWithLimit = function(e) {
+  var panel = this.panel;
   this.app.app_context.getCurrentStep = createMockFunction();
   expectCall(this.app.app_context.getCurrentStep)().willOnce(returnWith(15));
-  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, 16);
+  expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, 16)
+    .willOnce(function() {expectEq('step', panel.last_clicked_name);});
   var ev = {};
   this.panel.onStepButtonClick(ev);
+};
+
+PageControlPanelTest.prototype.updateViewWhenStopped = function(e) {
+  this.app.app_context.run_state = unlambda_app.RUN_STATE.STOPPED;
+
+  expectCall(this.dom_helper.enable)(this.panel.buttons['stop'], false);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['pause'], false);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run_step'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['step'], true);
+  this.panel.updateView();
+};
+
+PageControlPanelTest.prototype.updateViewWhenPaused = function(e) {
+  this.app.app_context.run_state = unlambda_app.RUN_STATE.PAUSED;
+
+  expectCall(this.dom_helper.enable)(this.panel.buttons['stop'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['pause'], false);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run_step'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['step'], true);
+  this.panel.updateView();
+};
+
+PageControlPanelTest.prototype.updateViewDisablePreviouslyClickedButtonWhenRun = function(e) {
+  this.app.app_context.run_state = unlambda_app.RUN_STATE.RUNNING
+  this.panel.last_clicked_name = 'run_step';
+  expectCall(this.dom_helper.enable)(this.panel.buttons['stop'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['pause'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run'], true);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['run_step'], false);
+  expectCall(this.dom_helper.enable)(this.panel.buttons['step'], true);
+  this.panel.updateView();
 };
