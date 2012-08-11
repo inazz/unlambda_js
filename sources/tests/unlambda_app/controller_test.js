@@ -23,8 +23,8 @@ UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   this.controller.init();
 
   this.controller.run_ = createMockFunction();
-  expectCall(this.controller.run_)();
-  loop_func();
+  expectCall(this.controller.run_)().willOnce(returnWith(true));
+  expectTrue(loop_func());
 
   this.controller.onUnlambdaInput = createMockFunction();
   expectCall(this.controller.onUnlambdaInput)();

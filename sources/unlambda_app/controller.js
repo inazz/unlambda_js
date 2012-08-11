@@ -15,7 +15,8 @@ unlambda_app.Controller.MAX_BURST_STEP = 5000;
 
 unlambda_app.Controller.prototype.init = function() {
   var that = this;
-  this.run_thread = this.loop_thread_factory.create(function() {that.run_()});
+  this.run_thread = this.loop_thread_factory.create(
+    function() {return that.run_()});
   this.input_callback = function() {that.onUnlambdaInput();};
   this.output_callback = function(c) {that.onUnlambdaOutput(c);};
 };
