@@ -11,7 +11,7 @@ unlambda.OP = {  // comments are expected Variable.v1 and v2.
   I:       'i',
   V:       'v',
   C:       'c',
-  C1:      'c1', // root_variable, current_character
+  C1:      'c1', // root_variable
   D:       'd',
   D1:      'd1', // not evaluated variable
   PRINT:   '.',  // string of length 1

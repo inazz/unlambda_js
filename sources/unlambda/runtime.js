@@ -67,13 +67,11 @@ unlambda.runtime.run = function(ctx) {
       break;
     case unlambda.runtime.STATE.C_BREAK:
       ctx.event_c1.v1 = ctx.variable;
-      ctx.event_c1.v2 = ctx.current_character;
       ctx.event_c1 = null;
       ctx.state = unlambda.runtime.STATE.RUNNING;
       break;
     case unlambda.runtime.STATE.C1_BREAK:
       ctx.variable = ctx.event_c1.v1;
-      ctx.current_character = ctx.event_c1.v2;
       ctx.state = unlambda.runtime.STATE.RUNNING;
       break;
     }

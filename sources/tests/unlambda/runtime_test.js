@@ -131,7 +131,7 @@ UnlambdaRuntimeRunTest.prototype.C = function() {
   unlambda.runtime.run(ctx);
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
   expectEq(4, ctx.step);
-  expectEq('x', ctx.current_character);
+  expectEq('y', ctx.current_character);
   expectEq(varI, ctx.variable);
 };
 
@@ -147,7 +147,7 @@ UnlambdaRuntimeRunTest.prototype.CStep = function() {
   unlambda.runtime.run(ctx);
   expectEq(unlambda.runtime.STATE.STEP_LIMIT, ctx.state);
   var varExpect = unlambda.parser.parse('``@ci').variable;
-  var varC1 = new unlambda.Variable(unlambda.OP.C1, varExpect, 'x');
+  var varC1 = new unlambda.Variable(unlambda.OP.C1, varExpect, null);
   varExpect.v1.v2 = varC1;
   expectEq(varExpect, ctx.variable);
   expectEq('x', ctx.current_character);
@@ -161,7 +161,7 @@ UnlambdaRuntimeRunTest.prototype.CStep = function() {
   unlambda.runtime.run(ctx);
   expectEq(unlambda.runtime.STATE.STEP_LIMIT, ctx.state);
   expectEq(unlambda.parser.parse('`ii').variable, ctx.variable);
-  expectEq('x', ctx.current_character);
+  expectEq('y', ctx.current_character);
 };
 
 UnlambdaRuntimeRunTest.prototype.D = function() {
