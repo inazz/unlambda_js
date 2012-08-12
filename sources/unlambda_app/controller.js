@@ -17,7 +17,7 @@ unlambda_app.Controller.prototype.init = function() {
   var that = this;
   this.run_thread = this.loop_thread_factory.create(
     function() {return that.run_()});
-  this.input_callback = function() {that.onUnlambdaInput();};
+  this.input_callback = function() {return that.onUnlambdaInput();};
   this.output_callback = function(c) {that.onUnlambdaOutput(c);};
 };
 
@@ -123,8 +123,7 @@ unlambda_app.Controller.prototype.onInputChange = function() {
 };
 
 unlambda_app.Controller.prototype.onUnlambdaInput = function() {
-  // TODO.
-  return -1;
+  return this.app.getInputPanel().consumeCharacter();
 };
 unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
   this.app.getOutputPanel().appendOutput(c);

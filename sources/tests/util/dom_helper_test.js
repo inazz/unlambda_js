@@ -38,6 +38,12 @@ UtilDomHelperTest.prototype.GetValue = function() {
   expectEq('test', this.dom_helper.getValue(dom));
 };
 
+UtilDomHelperTest.prototype.SetValue = function() {
+  var dom = {};
+  this.dom_helper.setValue(dom, 'test');
+  expectEq('test', dom.value);
+};
+
 UtilDomHelperTest.prototype.CreateElement = function() {
   var dom = {};
   this.document.createElement = createMockFunction();

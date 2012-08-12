@@ -31,8 +31,8 @@ UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   expectTrue(loop_func());
 
   this.controller.onUnlambdaInput = createMockFunction();
-  expectCall(this.controller.onUnlambdaInput)();
-  this.controller.input_callback();
+  expectCall(this.controller.onUnlambdaInput)().willOnce(returnWith(true));
+  expectTrue(this.controller.input_callback());
 
   var c = 'x';
   this.controller.onUnlambdaOutput = createMockFunction();
@@ -55,6 +55,12 @@ UnlambdaAppControllerTest.prototype.OnInputChangeDoNothingWhenNotWaiting = funct
 
   this.controller.onInputChange();
   expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
+};
+
+UnlambdaAppControllerTest.prototype.OnUnlambdaInputRedirectToInPanel = function() {
+  expectCall(this.app.getInputPanel().consumeCharacter)()
+    .willOnce(returnWith('x'));
+  expectEq('x', this.controller.onUnlambdaInput());
 };
 
 UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = function() {

@@ -50,3 +50,28 @@ PageInputPanelTest.prototype.OnChangeUpdateEofModeCaseFalse = function() {
   this.panel.onChange();
   expectFalse(this.panel.eof_mode);
 };
+
+
+PageInputPanelTest.prototype.ComsumeCharacter = function() {
+  expectCall(this.dom_helper.getValue)(this.panel.input_area).willOnce(
+    returnWith("abc"));
+  expectCall(this.dom_helper.setValue)(this.panel.input_area, "bc");
+
+  expectEq('a', this.panel.consumeCharacter());
+};
+
+PageInputPanelTest.prototype.ComsumeCharacterReturnEOFWhenEmptyAndEofMode = function() {
+  expectCall(this.dom_helper.getValue)(this.panel.input_area).willOnce(
+    returnWith(""));
+  this.panel.eof_mode = true;
+
+  expectEq(unlambda.runtime.IO_CODE.EOF, this.panel.consumeCharacter());
+};
+
+PageInputPanelTest.prototype.ComsumeCharacterBlocksWhenEmptyAndNotEofMode = function() {
+  expectCall(this.dom_helper.getValue)(this.panel.input_area).willOnce(
+    returnWith(""));
+  this.panel.eof_mode = false;
+
+  expectEq(unlambda.runtime.IO_CODE.BLOCK, this.panel.consumeCharacter());
+};

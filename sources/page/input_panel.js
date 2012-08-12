@@ -41,3 +41,20 @@ page.InputPanel.prototype.onChange = function() {
   this.app.getController().onInputChange();
 };
 
+// This method implements inputCallback on unlambda.runtime.IO.
+page.InputPanel.prototype.consumeCharacter = function() {
+  var str = this.dom_helper.getValue(this.input_area);
+  if (str.length == 0) {
+    if (this.eof_mode) {
+      return unlambda.runtime.IO_CODE.EOF;
+    } else {
+      return unlambda.runtime.IO_CODE.BLOCK;
+    }
+  } else {
+    var result = str.substring(0, 1);
+    str = str.substring(1);
+    this.dom_helper.setValue(this.input_area, str);
+    return result;
+  }
+};
+

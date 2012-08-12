@@ -23,6 +23,11 @@ util.DomHelper.prototype.getValue = function(dom) {
   return dom.value;
 };
 
+// HtmlElement, string
+util.DomHelper.prototype.setValue = function(dom, str) {
+  return dom.value = str;
+};
+
 // String
 util.DomHelper.prototype.createElement = function(name) {
   return this.doc.createElement(name);

@@ -32,7 +32,7 @@ class SourceFiles
       # page components.
       'page/code_panel.js' => ['util/dom_helper.js'],
       'page/control_panel.js' => ['util/dom_helper.js'],
-      'page/input_panel.js' => ['util/dom_helper.js'],
+      'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
       # utility.
       'util/dom_helper.js' => [],
