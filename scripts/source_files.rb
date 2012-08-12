@@ -61,6 +61,8 @@ class SourceFiles
         'page/code_panel.js'],
       'tests/page/control_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/control_panel.js'],
+      'tests/page/input_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/input_panel.js'],
       'tests/page/output_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/output_panel.js'],
       # utility tests.
