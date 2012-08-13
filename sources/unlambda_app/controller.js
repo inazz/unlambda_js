@@ -123,8 +123,15 @@ unlambda_app.Controller.prototype.onInputChange = function() {
 };
 
 unlambda_app.Controller.prototype.onUnlambdaInput = function() {
-  return this.app.getInputPanel().consumeCharacter();
+  var c = this.app.getInputPanel().consumeCharacter();
+  if (this.app.getInputPanel().getEchoBackMode() &&
+      c != unlambda.runtime.IO_CODE.EOF &&
+      c != unlambda.runtime.IO_CODE.BLOCK) {
+    this.app.getOutputPanel().appendInputEchoBack(c);
+  }
+  return c;
 };
+
 unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
   this.app.getOutputPanel().appendOutput(c);
 };

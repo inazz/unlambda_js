@@ -30,6 +30,10 @@ page.OutputPanel.prototype.appendOutput = function(str) {
   this.dom_helper.appendData(this.last_text_node, str);
 };
 
+page.OutputPanel.prototype.appendInputEchoBack = function(str) {
+  // TODO.
+};
+
 // string, unlambda.parser.ERROR, int
 page.OutputPanel.prototype.setCompileError = function(code, err, err_pos) {
   this.clear();

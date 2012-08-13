@@ -13,11 +13,11 @@ UnlambdaAppControllerTest.expectUpdateView = function(test) {
   test.controller.updateView = createMockFunction();
   expectCall(test.controller.updateView)();
 };
+
 UnlambdaAppControllerTest.expectThreadRun = function(test) {
   test.controller.run_thread = createMockInstance(util.LoopThread);
   expectCall(test.controller.run_thread.run)();
 };
-
 
 UnlambdaAppControllerTest.prototype.InitCreatesMembers = function() {
   var loop_func;
@@ -57,10 +57,37 @@ UnlambdaAppControllerTest.prototype.OnInputChangeDoNothingWhenNotWaiting = funct
   expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
 };
 
-UnlambdaAppControllerTest.prototype.OnUnlambdaInputRedirectToInPanel = function() {
+UnlambdaAppControllerTest.prototype.OnUnlambdaInputReadFromInputPanelAndEchoBack = function() {
+  expectCall(this.app.getInputPanel().getEchoBackMode)()
+    .willOnce(returnWith(true));
+  expectCall(this.app.getInputPanel().consumeCharacter)()
+    .willOnce(returnWith('x'));
+  expectCall(this.app.getOutputPanel().appendInputEchoBack)('x')
+  expectEq('x', this.controller.onUnlambdaInput());
+};
+
+UnlambdaAppControllerTest.prototype.OnUnlambdaInputNoEchobackIfDisabled = function() {
+  expectCall(this.app.getInputPanel().getEchoBackMode)()
+    .willOnce(returnWith(false));
   expectCall(this.app.getInputPanel().consumeCharacter)()
     .willOnce(returnWith('x'));
   expectEq('x', this.controller.onUnlambdaInput());
+};
+
+UnlambdaAppControllerTest.prototype.OnUnlambdaInputNoEchobackWhenEof = function() {
+  expectCall(this.app.getInputPanel().getEchoBackMode)()
+    .willOnce(returnWith(true));
+  expectCall(this.app.getInputPanel().consumeCharacter)()
+    .willOnce(returnWith(unlambda.runtime.IO_CODE.EOF));
+  expectEq(unlambda.runtime.IO_CODE.EOF, this.controller.onUnlambdaInput());
+};
+
+UnlambdaAppControllerTest.prototype.OnUnlambdaInputNoEchobackWhenBlock = function() {
+  expectCall(this.app.getInputPanel().getEchoBackMode)()
+    .willOnce(returnWith(true));
+  expectCall(this.app.getInputPanel().consumeCharacter)()
+    .willOnce(returnWith(unlambda.runtime.IO_CODE.BLOCK));
+  expectEq(unlambda.runtime.IO_CODE.BLOCK, this.controller.onUnlambdaInput());
 };
 
 UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = function() {
