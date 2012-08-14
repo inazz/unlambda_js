@@ -140,7 +140,9 @@ UnlambdaAppControllerTest.prototype.RunShowCompileError = function() {
   parse_result.error_pos = 5;
   expectCall(this.app.code_panel.getCode)().willOnce(returnWith(code));
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
-  expectCall(this.app.output_panel.setCompileError)(
+  expectCall(this.app.output_panel.clear)();
+  expectCall(this.app.status_panel.clear)();
+  expectCall(this.app.status_panel.setCompileError)(
     code, unlambda.parser.ERROR.EXTRA_CHARACTER, 5);
   UnlambdaAppControllerTest.expectUpdateView(this);
 
@@ -164,6 +166,7 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
     this.controller.output_callback)
     .willOnce(returnWith(runtime_context));
   expectCall(this.app.output_panel.clear)();
+  expectCall(this.app.status_panel.clear)();
   UnlambdaAppControllerTest.expectThreadRun(this);
   UnlambdaAppControllerTest.expectUpdateView(this);
 

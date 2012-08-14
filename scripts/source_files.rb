@@ -19,7 +19,7 @@ class SourceFiles
         'unlambda_app/app_context.js', 'unlambda_app/controller.js',
         'page/code_panel.js', 'page/control_panel.js',
         'page/input_panel.js', 'page/output_panel.js',
-        'unlambda/unlambda.js'],
+        'page/status_panel.js', 'unlambda/unlambda.js'],
       'unlambda_app/app_context.js' => [
         'unlambda/runtime.js',
         'unlambda_app/run_mode.js', 'unlambda_app/run_state.js'],
@@ -34,6 +34,7 @@ class SourceFiles
       'page/control_panel.js' => ['util/dom_helper.js'],
       'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
+      'page/status_panel.js' => ['util/dom_helper.js'],
       # utility.
       'util/dom_helper.js' => [],
       'util/loop_thread.js' => [],
@@ -65,6 +66,8 @@ class SourceFiles
         'page/input_panel.js'],
       'tests/page/output_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/output_panel.js'],
+      'tests/page/status_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/status_panel.js'],
       # utility tests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],

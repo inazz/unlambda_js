@@ -7,6 +7,7 @@ unlambda_app.MockApp = function() {
   this.code_panel = createMockInstance(page.CodePanel);
   this.input_panel = createMockInstance(page.InputPanel);
   this.output_panel = createMockInstance(page.OutputPanel);
+  this.status_panel = createMockInstance(page.StatusPanel);
 };
 
 unlambda_app.MockApp.prototype.getController = function() {
@@ -31,4 +32,8 @@ unlambda_app.MockApp.prototype.getInputPanel = function() {
 
 unlambda_app.MockApp.prototype.getOutputPanel = function() {
   return this.output_panel;
+};
+
+unlambda_app.MockApp.prototype.getStatusPanel = function() {
+  return this.status_panel;
 };

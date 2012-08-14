@@ -11,6 +11,7 @@ unlambda_app.App = function(controller_factory, app_context, panel_factory) {
   this.code_panel = panel_factory['code'](this);
   this.input_panel = panel_factory['input'](this);
   this.output_panel = panel_factory['output'](this);
+  this.status_panel = panel_factory['status'](this);
 };
 
 // Window, Document
@@ -31,6 +32,8 @@ unlambda_app.App.create = function(window, doc){
       return new page.InputPanel(app, dom_helper);},
     'output': function(app) {
       return new page.OutputPanel(app, dom_helper);},
+    'status': function(app) {
+      return new page.StatusPanel(app, dom_helper);},
   };
   return new unlambda_app.App(controller_factory, app_context, panel_factory);
 }
@@ -41,6 +44,7 @@ unlambda_app.App.prototype.init = function() {
   this.code_panel.init();
   this.input_panel.init();
   this.output_panel.init();
+  this.status_panel.init();
 };
 
 unlambda_app.App.prototype.getController = function() {
@@ -65,4 +69,8 @@ unlambda_app.App.prototype.getInputPanel = function() {
 
 unlambda_app.App.prototype.getOutputPanel = function() {
   return this.output_panel;
+};
+
+unlambda_app.App.prototype.getStatusPanel = function() {
+  return this.status_panel;
 };

@@ -93,14 +93,15 @@ unlambda_app.Controller.prototype.run = function(mode, limit) {
   var ctx = this.app.getAppContext();
   var ok = true;
   if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
+    this.app.getOutputPanel().clear();
+    this.app.getStatusPanel().clear();
     var code = this.app.getCodePanel().getCode();
     var parse_result = this.unl.parse(code);
     if (!parse_result.success) {
-      this.app.getOutputPanel().setCompileError(
+      this.app.getStatusPanel().setCompileError(
         code, parse_result.error, parse_result.error_pos);
       ok = false;
     } else {
-      this.app.getOutputPanel().clear();
       ctx.runtime_context = this.unl.newContext(
         parse_result.variable, this.input_callback, this.output_callback);
     }
