@@ -55,10 +55,9 @@ UtilDomHelperTest.prototype.CreateElement = function() {
 UtilDomHelperTest.prototype.CreateTextNode = function() {
   var dom = {};
   this.document.createTextNode = createMockFunction();
-  expectCall(this.document.createTextNode)()
+  expectCall(this.document.createTextNode)('')
     .willOnce(returnWith(dom));
   expectEq(dom, this.dom_helper.createTextNode());
-  expectEq('', dom.data);
 };
 
 UtilDomHelperTest.prototype.AppendData = function() {

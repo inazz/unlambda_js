@@ -34,8 +34,7 @@ util.DomHelper.prototype.createElement = function(name) {
 };
 
 util.DomHelper.prototype.createTextNode = function() {
-  var node = this.doc.createTextNode();
-  node.data = '';
+  var node = this.doc.createTextNode('');
   return node;
 };
 
