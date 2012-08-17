@@ -115,6 +115,10 @@ unlambda_app.Controller.prototype.run = function(mode, limit) {
   this.updateView();
 };
 
+unlambda_app.Controller.prototype.setThreadWaitInterval = function(t) {
+  this.run_thread.setInterval(t);
+};
+
 unlambda_app.Controller.prototype.onInputChange = function() {
   var ctx = this.app.getAppContext();
   if (ctx.run_state == unlambda_app.RUN_STATE.INPUT_WAIT) {

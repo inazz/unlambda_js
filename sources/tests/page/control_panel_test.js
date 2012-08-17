@@ -53,6 +53,7 @@ PageControlPanelTest.prototype.onRunButtonClickCallController = function(e) {
   var panel = this.panel;
   expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, -1).willOnce(
     function() {expectEq('run', panel.last_clicked_name);});
+  expectCall(this.app.controller.setThreadWaitInterval)(0);
   var ev = {};
   this.panel.onRunButtonClick(ev);
 };
@@ -61,6 +62,7 @@ PageControlPanelTest.prototype.onRunStepButtonClickCallController = function(e) 
   var panel = this.panel;
   expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN_STEP, -1)
     .willOnce(function() {expectEq('run_step', panel.last_clicked_name);});
+  expectCall(this.app.controller.setThreadWaitInterval)(1000);
   var ev = {};
   this.panel.onRunStepButtonClick(ev);
 };
@@ -71,6 +73,7 @@ PageControlPanelTest.prototype.onStepButtonClickCallControllerWithLimit = functi
   expectCall(this.app.app_context.getCurrentStep)().willOnce(returnWith(15));
   expectCall(this.app.controller.run)(unlambda_app.RUN_MODE.RUN, 16)
     .willOnce(function() {expectEq('step', panel.last_clicked_name);});
+  expectCall(this.app.controller.setThreadWaitInterval)(0);
   var ev = {};
   this.panel.onStepButtonClick(ev);
 };

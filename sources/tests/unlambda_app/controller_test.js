@@ -5,6 +5,7 @@ function UnlambdaAppControllerTest() {
   this.loop_thread_factory = createMockInstance(util.LoopThreadFactory);
   this.controller =
     new unlambda_app.Controller(this.app, this.unl, this.loop_thread_factory);
+  this.controller.run_thread = createMockInstance(util.LoopThread);
   this.app.controller = this.controller;
 }
 registerTestSuite(UnlambdaAppControllerTest);
@@ -15,7 +16,6 @@ UnlambdaAppControllerTest.expectUpdateView = function(test) {
 };
 
 UnlambdaAppControllerTest.expectThreadRun = function(test) {
-  test.controller.run_thread = createMockInstance(util.LoopThread);
   expectCall(test.controller.run_thread.run)();
 };
 
@@ -175,6 +175,11 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
   expectEq(unlambda_app.RUN_MODE.RUN_STEP, ctx.run_mode);
   expectEq(100, ctx.step_limit);
   expectEq(runtime_context, ctx.runtime_context);
+};
+
+UnlambdaAppControllerTest.prototype.SetThreadWaitInterval = function() {
+  expectCall(this.controller.run_thread.setInterval)(1000);
+  this.controller.setThreadWaitInterval(1000);
 };
 
 UnlambdaAppControllerTest.prototype.SetUpRuntimeStep = function() {

@@ -38,14 +38,17 @@ page.ControlPanel.prototype.onPauseButtonClick = function(e) {
 };
 page.ControlPanel.prototype.onRunButtonClick = function(e) {
   this.last_clicked_name = 'run';
+  this.app.getController().setThreadWaitInterval(0);
   this.app.getController().run(unlambda_app.RUN_MODE.RUN, -1);
 };
 page.ControlPanel.prototype.onRunStepButtonClick = function(e) {
   this.last_clicked_name = 'run_step';
+  this.app.getController().setThreadWaitInterval(1000);
   this.app.getController().run(unlambda_app.RUN_MODE.RUN_STEP, -1);
 };
 page.ControlPanel.prototype.onStepButtonClick = function(e) {
   this.last_clicked_name = 'step';
+  this.app.getController().setThreadWaitInterval(0);
   this.app.getController().run(unlambda_app.RUN_MODE.RUN,
                                this.app.getAppContext().getCurrentStep() + 1);
 };
