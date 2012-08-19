@@ -12,13 +12,15 @@ class Builder
     testResult = runTests()
     if !@build
       puts "Don't build js file since you specified so."
-    elsif !testResult
-      puts "Don't build js file since test didn't pass."
     elsif @test_filter != nil
       puts "Don't build js file since not all tests are executed."
     else
-      build()
-      puts 'Build sucessfully finished.'
+      if !testResult && !@force
+        puts "Don't build js file since test didn't pass."
+      else
+        build()
+        puts 'Build sucessfully finished.'
+      end
     end
   end
 
@@ -32,6 +34,8 @@ class Builder
 
     @build = true
     opt.on('--[no-]build', TrueClass) {|f| @build = f}
+    @force = false
+    opt.on('-f', TrueClass) {|f| @force = f}
 
     opt.parse!(args)
   end
