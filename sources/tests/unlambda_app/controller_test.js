@@ -321,6 +321,7 @@ UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak =
 UnlambdaAppControllerTest.prototype.UpdateView = function() {
   expectCall(this.app.getControlPanel().updateView)();
   expectCall(this.app.getCodePanel().updateView)();
+  expectCall(this.app.getStatusPanel().updateView)();
 
   this.controller.updateView();
 };

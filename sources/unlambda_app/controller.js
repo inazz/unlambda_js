@@ -144,4 +144,5 @@ unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
 unlambda_app.Controller.prototype.updateView = function() {
   this.app.getControlPanel().updateView();
   this.app.getCodePanel().updateView();
+  this.app.getStatusPanel().updateView();
 };

@@ -17,10 +17,18 @@ PageStatusPanelTest.prototype.InitGrabsDom = function() {
   expectEq(status_dom, this.panel.status_block);
 };
 
-PageStatusPanelTest.prototype.ClearRemovesAll = function() {
-  expectCall(this.dom_helper.removeChildren)(this.panel.status_block);
+PageStatusPanelTest.prototype.SetCompileError = function() {
+  this.panel.compile_error = {};
 
   this.panel.clear();
+  expectEq(null, this.panel.compile_error);
+};
+
+PageStatusPanelTest.prototype.ClearRemovesCompileError = function() {
+  this.panel.compile_error = {};
+
+  this.panel.clear();
+  expectEq(null, this.panel.compile_error);
 };
 
 // PageStatusPanelTest, string?, string, string?
@@ -70,36 +78,37 @@ PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation = function(
   }
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorJustUnexpectedCharacter = function() {
+PageStatusPanelTest.prototype.ShowCompileError_JustUnexpectedCharacter = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, null, 'x', null);
-  this.panel.setCompileError(
-    'x', unlambda.parser.ERROR.UNEXPECTED_CHARACTER, 0);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = 'x';
+  this.panel.compile_error.error = unlambda.parser.ERROR.UNEXPECTED_CHARACTER;
+  this.panel.compile_error.error_pos = 0;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorJustUnexpectedCharacter = function() {
-  PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
-    this, null, 'x', null);
-  this.panel.setCompileError(
-    'x', unlambda.parser.ERROR.UNEXPECTED_CHARACTER, 0);
-};
-
-PageStatusPanelTest.prototype.SetCompileErrorUnexpectedCharacterInMiddleShort = function() {
+PageStatusPanelTest.prototype.ShowCompileError_UnexpectedCharacterInMiddleShort = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, '12345', 'x', '67890');
-  this.panel.setCompileError(
-    '12345x67890', unlambda.parser.ERROR.UNEXPECTED_CHARACTER, 5);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = '12345x67890';
+  this.panel.compile_error.error = unlambda.parser.ERROR.UNEXPECTED_CHARACTER;
+  this.panel.compile_error.error_pos = 5;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorUnexpectedCharacterInMiddleLong = function() {
+PageStatusPanelTest.prototype.ShowCompileError_UnexpectedCharacterInMiddleLong = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, '...901234567890', 'x', '12345678901...');
-  this.panel.setCompileError(
-    '12345678901234567890x12345678901234567890',
-    unlambda.parser.ERROR.UNEXPECTED_CHARACTER, 20);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = '12345678901234567890x12345678901234567890';
+  this.panel.compile_error.error = unlambda.parser.ERROR.UNEXPECTED_CHARACTER;
+  this.panel.compile_error.error_pos = 20;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorUnexpectedEOF = function() {
+PageStatusPanelTest.prototype.ShowCompileError_UnexpectedEOF = function() {
   expectCall(this.dom_helper.removeChildren)(this.panel.status_block);
 
   var span = {name: 'span'}, span_text = {name: 'span_text'};
@@ -112,28 +121,39 @@ PageStatusPanelTest.prototype.SetCompileErrorUnexpectedEOF = function() {
   expectCall(this.dom_helper.appendChild)(span, span_text);
   expectCall(this.dom_helper.appendData)(span_text, _);
 
-  this.panel.setCompileError(
-    '`i', unlambda.parser.ERROR.UNEXPECTED_EOF, 2);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = '`i';
+  this.panel.compile_error.error = unlambda.parser.ERROR.UNEXPECTED_EOF;
+  this.panel.compile_error.error_pos = 2;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorJustExtraCharacter = function() {
+PageStatusPanelTest.prototype.ShowCompileError_JustExtraCharacter = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, null, 'x', null);
-  this.panel.setCompileError(
-    'x', unlambda.parser.ERROR.EXTRA_CHARACTER, 0);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = 'x';
+  this.panel.compile_error.error = unlambda.parser.ERROR.EXTRA_CHARACTER;
+  this.panel.compile_error.error_pos = 0;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorExtraCharacterShort = function() {
+PageStatusPanelTest.prototype.ShowCompileError_ExtraCharacterShort = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, '`ii', 'xxx', null);
-  this.panel.setCompileError(
-    '`iixxx', unlambda.parser.ERROR.EXTRA_CHARACTER, 3);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = '`iixxx';
+  this.panel.compile_error.error = unlambda.parser.ERROR.EXTRA_CHARACTER;
+  this.panel.compile_error.error_pos = 3;
+  this.panel.showCompileError_();
 };
 
-PageStatusPanelTest.prototype.SetCompileErrorExtraCharacterLong = function() {
+PageStatusPanelTest.prototype.ShowCompileError_ExtraCharacterLong = function() {
   PageStatusPanelTest.setUpCompileErrorWithCodeSnippetExpectation(
     this, '...901234567890', '123456789012...', null);
-  this.panel.setCompileError(
-    '1234567890123456789012345678901234567890',
-    unlambda.parser.ERROR.EXTRA_CHARACTER, 20);
+  this.panel.compile_error = {};
+  this.panel.compile_error.code = '1234567890123456789012345678901234567890';
+  this.panel.compile_error.error = unlambda.parser.ERROR.EXTRA_CHARACTER;
+  this.panel.compile_error.error_pos = 20;
+  this.panel.showCompileError_();
 };

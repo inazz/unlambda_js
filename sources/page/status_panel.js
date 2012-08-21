@@ -8,6 +8,7 @@ page.StatusPanel = function(app, dom_helper) {
   this.app = app;
   this.dom_helper = dom_helper;
   this.status_block = null;
+  this.compile_error = null;
 };
 
 page.StatusPanel.prototype.init = function() {
@@ -15,14 +16,32 @@ page.StatusPanel.prototype.init = function() {
 };
 
 page.StatusPanel.prototype.clear = function() {
-  this.dom_helper.removeChildren(this.status_block);
+  this.compile_error = null;
 };
 
 // string, unlambda.parser.ERROR, int
 page.StatusPanel.prototype.setCompileError = function(code, err, err_pos) {
-  this.clear();
-  this.addCompileErrorMessage_(err, err_pos);
-  this.maybeAddCodeSnippet_(code, err, err_pos);
+  this.compile_error = {};
+  this.compile_error.code = code;
+  this.compile_error.error = err;
+  this.compile_error.error_pos = err_pos;
+};
+
+page.StatusPanel.prototype.updateView = function() {
+  if (this.compile_error) {
+    this.showCompileError_();
+  } else {
+    var ctx = this.app.getAppContext();
+    this.dom_helper.removeChildren(this.status_block);
+    // TODO.
+  }
+};
+
+page.StatusPanel.prototype.showCompileError_ = function() {
+  var err = this.compile_error;
+  this.dom_helper.removeChildren(this.status_block);
+  this.addCompileErrorMessage_(err.error, err.error_pos);
+  this.maybeAddCodeSnippet_(err.code, err.error, err.error_pos);
 };
 
 page.StatusPanel.prototype.addCompileErrorMessage_ = function(err, err_pos) {
