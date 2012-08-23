@@ -34,7 +34,8 @@ class SourceFiles
       'page/control_panel.js' => ['util/dom_helper.js'],
       'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
-      'page/status_panel.js' => ['util/dom_helper.js'],
+      'page/status_panel.js' => [
+        'util/dom_helper.js', 'unlambda_app/run_state.js'],
       # utility.
       'util/dom_helper.js' => [],
       'util/loop_thread.js' => [],

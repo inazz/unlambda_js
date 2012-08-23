@@ -7,12 +7,15 @@ var page = page || {};
 page.StatusPanel = function(app, dom_helper) {
   this.app = app;
   this.dom_helper = dom_helper;
-  this.status_block = null;
   this.compile_error = null;
+  this.status_span = null;
+  this.step_span = null;
 };
 
 page.StatusPanel.prototype.init = function() {
-  this.status_block = this.dom_helper.get('status_block');
+  this.compile_error_block = this.dom_helper.get('compile_error_block');
+  this.status_span = this.dom_helper.get('current_status');
+  this.step_span = this.dom_helper.get('current_step');
 };
 
 page.StatusPanel.prototype.clear = function() {
@@ -28,25 +31,46 @@ page.StatusPanel.prototype.setCompileError = function(code, err, err_pos) {
 };
 
 page.StatusPanel.prototype.updateView = function() {
-  if (this.compile_error) {
-    this.showCompileError_();
+  this.updateStatus_();
+  this.updateCompileError_();
+};
+
+page.StatusPanel.prototype.updateStatus_ = function() {
+  var ctx = this.app.getAppContext();
+
+  this.dom_helper.removeChildren(this.status_span);
+  var status_text = this.dom_helper.createTextNode();
+  this.dom_helper.appendChild(this.status_span, status_text);
+  this.dom_helper.appendData(
+    status_text, unlambda_app.RUN_STATE.toString(ctx.run_state));
+
+  this.dom_helper.removeChildren(this.step_span);
+  var step_text = this.dom_helper.createTextNode();
+  this.dom_helper.appendChild(this.step_span, step_text);
+  this.dom_helper.appendData(
+    step_text, "" + this.getCurrentStepForStatus(ctx));
+};
+
+page.StatusPanel.prototype.getCurrentStepForStatus = function(ctx) {
+  if (ctx.runtime_context) {
+    return ctx.runtime_context.step;
   } else {
-    var ctx = this.app.getAppContext();
-    this.dom_helper.removeChildren(this.status_block);
-    // TODO.
+    return 0;
   }
 };
 
-page.StatusPanel.prototype.showCompileError_ = function() {
+page.StatusPanel.prototype.updateCompileError_ = function() {
   var err = this.compile_error;
-  this.dom_helper.removeChildren(this.status_block);
-  this.addCompileErrorMessage_(err.error, err.error_pos);
-  this.maybeAddCodeSnippet_(err.code, err.error, err.error_pos);
+  this.dom_helper.removeChildren(this.compile_error_block);
+  if (err) {
+    this.addCompileErrorMessage_(err.error, err.error_pos);
+    this.maybeAddCodeSnippet_(err.code, err.error, err.error_pos);
+  }
 };
 
 page.StatusPanel.prototype.addCompileErrorMessage_ = function(err, err_pos) {
   var span = this.dom_helper.createElement('span');
-  this.dom_helper.appendChild(this.status_block, span);
+  this.dom_helper.appendChild(this.compile_error_block, span);
   this.dom_helper.addClass(span, 'error_message');
   var text_node = this.dom_helper.createTextNode();
   this.dom_helper.appendChild(span, text_node);
@@ -85,7 +109,7 @@ page.StatusPanel.prototype.maybeAddCodeSnippet_ = function(code, err, err_pos) {
   var after_max_len = 15;
   var code_node = this.dom_helper.createElement('code');
   this.dom_helper.addClass(code_node, 'error_snippet');
-  this.dom_helper.appendChild(this.status_block, code_node);
+  this.dom_helper.appendChild(this.compile_error_block, code_node);
   if (err_pos != 0) {
     var text_node = this.dom_helper.createTextNode();
     this.dom_helper.appendChild(code_node, text_node);
