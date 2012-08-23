@@ -73,8 +73,6 @@ unlambda_app.Controller.prototype.setUpRuntimeStepLimit = function(ctx) {
 unlambda_app.Controller.prototype.stop = function() {
   var ctx = this.app.getAppContext();
   ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
-  ctx.run_mode = null;
-  ctx.runtime_context = null;
   this.updateView();
 };
 

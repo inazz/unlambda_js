@@ -101,7 +101,6 @@ UnlambdaAppControllerTest.prototype.Stop = function() {
   this.controller.stop();
   var ctx = this.app.getAppContext();
   expectEq(unlambda_app.RUN_STATE.STOPPED, ctx.run_state);
-  expectEq(null, ctx.runtime_context);
 };
 
 UnlambdaAppControllerTest.prototype.PauseKeepRuntimeContext = function() {
