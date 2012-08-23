@@ -42,6 +42,7 @@ UnlambdaAppTest.prototype.Init = function() {
   expectCall(this.input_panel.init)();
   expectCall(this.output_panel.init)();
   expectCall(this.status_panel.init)();
+  expectCall(this.controller.updateView)();
 
   this.app.init();
 };

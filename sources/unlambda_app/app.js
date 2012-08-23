@@ -45,6 +45,7 @@ unlambda_app.App.prototype.init = function() {
   this.input_panel.init();
   this.output_panel.init();
   this.status_panel.init();
+  this.controller.updateView();
 };
 
 unlambda_app.App.prototype.getController = function() {
