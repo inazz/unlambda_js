@@ -137,7 +137,7 @@ UnlambdaAppControllerTest.prototype.RunShowCompileError = function() {
   parse_result.success = false;
   parse_result.error = unlambda.parser.ERROR.EXTRA_CHARACTER;
   parse_result.error_pos = 5;
-  expectCall(this.app.code_panel.getCode)().willOnce(returnWith(code));
+  expectCall(this.app.input_code_panel.getCode)().willOnce(returnWith(code));
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
   expectCall(this.app.output_panel.clear)();
   expectCall(this.app.status_panel.clear)();
@@ -158,7 +158,7 @@ UnlambdaAppControllerTest.prototype.RunNewCode = function() {
   parse_result.variable = createMockInstance(unlambda.Variable);
   var runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
 
-  expectCall(this.app.code_panel.getCode)().willOnce(returnWith(code));
+  expectCall(this.app.input_code_panel.getCode)().willOnce(returnWith(code));
   expectCall(this.unl.parse)(code).willOnce(returnWith(parse_result));
   expectCall(this.unl.newContext)(
     parse_result.variable, this.controller.input_callback,
@@ -319,7 +319,7 @@ UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak =
 
 UnlambdaAppControllerTest.prototype.UpdateView = function() {
   expectCall(this.app.getControlPanel().updateView)();
-  expectCall(this.app.getCodePanel().updateView)();
+  expectCall(this.app.getInputCodePanel().updateView)();
   expectCall(this.app.getStatusPanel().updateView)();
 
   this.controller.updateView();

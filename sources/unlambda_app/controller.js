@@ -93,7 +93,7 @@ unlambda_app.Controller.prototype.run = function(mode, limit) {
   if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
     this.app.getOutputPanel().clear();
     this.app.getStatusPanel().clear();
-    var code = this.app.getCodePanel().getCode();
+    var code = this.app.getInputCodePanel().getCode();
     var parse_result = this.unl.parse(code);
     if (!parse_result.success) {
       this.app.getStatusPanel().setCompileError(
@@ -141,6 +141,6 @@ unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
 
 unlambda_app.Controller.prototype.updateView = function() {
   this.app.getControlPanel().updateView();
-  this.app.getCodePanel().updateView();
+  this.app.getInputCodePanel().updateView();
   this.app.getStatusPanel().updateView();
 };

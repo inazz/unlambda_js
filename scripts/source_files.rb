@@ -17,7 +17,7 @@ class SourceFiles
       # app logics.
       'unlambda_app/app.js' => [
         'unlambda_app/app_context.js', 'unlambda_app/controller.js',
-        'page/code_panel.js', 'page/control_panel.js',
+        'page/control_panel.js', 'page/input_code_panel.js',
         'page/input_panel.js', 'page/output_panel.js',
         'page/status_panel.js', 'unlambda/unlambda.js'],
       'unlambda_app/app_context.js' => [
@@ -30,8 +30,8 @@ class SourceFiles
       'unlambda_app/run_mode.js' => [],
       'unlambda_app/run_state.js' => [],
       # page components.
-      'page/code_panel.js' => ['util/dom_helper.js'],
       'page/control_panel.js' => ['util/dom_helper.js'],
+      'page/input_code_panel.js' => ['util/dom_helper.js'],
       'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
       'page/status_panel.js' => [
@@ -60,10 +60,10 @@ class SourceFiles
         'unlambda_app/mock_app.js', 'unlambda_app/controller.js' ],
       'tests/unlambda_app/run_state_test.js' => ['unlambda_app/run_state.js'],
       # page component tests.
-      'tests/page/code_panel_test.js' => ['unlambda_app/mock_app.js',
-        'page/code_panel.js'],
       'tests/page/control_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/control_panel.js'],
+      'tests/page/input_code_panel_test.js' => ['unlambda_app/mock_app.js',
+        'page/input_code_panel.js'],
       'tests/page/input_panel_test.js' => ['unlambda_app/mock_app.js',
         'page/input_panel.js'],
       'tests/page/output_panel_test.js' => ['unlambda_app/mock_app.js',

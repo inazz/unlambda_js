@@ -1,15 +1,15 @@
 
-function PageCodePanelTest() {
+function PageInputCodePanelTest() {
   this.app = new unlambda_app.MockApp();
   this.dom_helper = createMockInstance(util.DomHelper);
-  this.panel = new page.CodePanel(this.app, this.dom_helper);
-  this.app.code_panel = this.panel;
+  this.panel = new page.InputCodePanel(this.app, this.dom_helper);
+  this.app.input_code_panel = this.panel;
   this.panel.code_area = {};
   this.panel.code_selector = {};
 }
-registerTestSuite(PageCodePanelTest);
+registerTestSuite(PageInputCodePanelTest);
 
-PageCodePanelTest.prototype.initRegisterCallbacks = function() {
+PageInputCodePanelTest.prototype.initRegisterCallbacks = function() {
   var code_area = {}, code_selector = {};
   expectCall(this.dom_helper.get)('code').willOnce(returnWith(code_area));
   expectCall(this.dom_helper.get)('code_selector')
@@ -26,49 +26,49 @@ PageCodePanelTest.prototype.initRegisterCallbacks = function() {
   expectEq(code_selector, this.panel.code_selector);
 };
 
-PageCodePanelTest.prototype.GetCode = function() {
+PageInputCodePanelTest.prototype.GetCode = function() {
   var code = "hoge";
   expectCall(this.dom_helper.getValue)(this.panel.code_area).willOnce(
     returnWith(code));
   expectEq(code, this.panel.getCode());
 };
 
-PageCodePanelTest.prototype.OnCodeChangeDoNothingWhenNotASample = function() {
+PageInputCodePanelTest.prototype.OnCodeChangeDoNothingWhenNotASample = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
     .willOnce(returnWith(""));
   this.panel.onCodeChange();
 };
 
-PageCodePanelTest.prototype.OnCodeChangeMakeSelectorDefaut = function() {
+PageInputCodePanelTest.prototype.OnCodeChangeMakeSelectorDefaut = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
     .willOnce(returnWith("hello_world"));
   expectCall(this.dom_helper.setValue)(this.panel.code_selector, "");
   this.panel.onCodeChange();
 };
 
-PageCodePanelTest.prototype.OnSelectorChangeDoNothingWhenDefault = function() {
+PageInputCodePanelTest.prototype.OnSelectorChangeDoNothingWhenDefault = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
     .willOnce(returnWith(""));
   this.panel.onSelectorChange();
 };
 
-PageCodePanelTest.prototype.OnSelectorChangeHelloWorld = function() {
+PageInputCodePanelTest.prototype.OnSelectorChangeHelloWorld = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
     .willOnce(returnWith("hello_world"));
   expectCall(this.dom_helper.setValue)(
-    this.panel.code_area, page.CodePanel.HELLO_WORLD_CODE);
+    this.panel.code_area, page.InputCodePanel.HELLO_WORLD_CODE);
   this.panel.onSelectorChange();
 };
 
-PageCodePanelTest.prototype.OnSelectorChangeHelloWorldShort = function() {
+PageInputCodePanelTest.prototype.OnSelectorChangeHelloWorldShort = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
     .willOnce(returnWith("hello_world_short"));
   expectCall(this.dom_helper.setValue)(
-    this.panel.code_area, page.CodePanel.HELLO_WORLD_SHORT_CODE);
+    this.panel.code_area, page.InputCodePanel.HELLO_WORLD_SHORT_CODE);
   this.panel.onSelectorChange();
 };
 
-PageCodePanelTest.prototype.UpdateViewEnableEditWhenStopped = function() {
+PageInputCodePanelTest.prototype.UpdateViewEnableEditWhenStopped = function() {
   var ctx = this.app.getAppContext();
 
   ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
@@ -77,7 +77,7 @@ PageCodePanelTest.prototype.UpdateViewEnableEditWhenStopped = function() {
   this.panel.updateView();
 };
 
-PageCodePanelTest.prototype.UpdateViewDisableEditWhenNotStopped = function() {
+PageInputCodePanelTest.prototype.UpdateViewDisableEditWhenNotStopped = function() {
   var ctx = this.app.getAppContext();
 
   ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
