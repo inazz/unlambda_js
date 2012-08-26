@@ -25,6 +25,7 @@ UnlambdaRuntimeRunTest.prototype.VariableJustExited = function() {
   unlambda.runtime.run(ctx);
   expectEq(0, ctx.step);
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
+  expectEq(null, ctx.next_apply);
   expectEq(varI, ctx.variable);
 };
 
@@ -61,12 +62,14 @@ UnlambdaRuntimeRunTest.prototype.KStep = function() {
   unlambda.runtime.run(ctx);
   expectEq(1, ctx.step);
   expectEq(unlambda.runtime.STATE.STEP_LIMIT, ctx.state);
+  expectEq(varK1IV, ctx.next_apply);
   expectEq(varK1IV, ctx.variable);
 
   ctx.step_limit = -1;
   unlambda.runtime.run(ctx);
   expectEq(2, ctx.step);
   expectEq(unlambda.runtime.STATE.EXITED, ctx.state);
+  expectEq(null, ctx.next_apply);
   expectEq(varI, ctx.variable);
 };
 
@@ -294,7 +297,8 @@ UnlambdaRuntimeRunTest.prototype.ReadBlock = function() {
 
   expectEq(unlambda.runtime.STATE.INPUT_WAIT, ctx.state);
   expectEq(0, ctx.step);
-  expectEq(varRK, ctx.variable);
+  expectEq(varRK, ctx.current_variable);
+  expectEq(varRK, ctx.next_apply);
   expectEq(unlambda.runtime.IO_CODE.EOF, ctx.current_character);
 };
 

@@ -39,6 +39,8 @@ unlambda.runtime.RuntimeContext = function(variable, io) {
   this.step = 0; // int
   this.step_limit = -1; // int
   this.state = unlambda.runtime.STATE.RUNNING;
+  // This object only exist when result state is INPUT_WAIT or STEP_LIMIT.
+  this.next_apply = null; // unlambda.Variable.
 
   // for temporary use while run().
   this.current_variable = null; // unlambda.Variable
@@ -53,6 +55,7 @@ unlambda.runtime.run = function(ctx) {
     return;
   }
   ctx.state = unlambda.runtime.STATE.RUNNING;
+  ctx.next_apply = null;
   while (ctx.state == unlambda.runtime.STATE.RUNNING) {
     ctx.current_variable = ctx.variable;
     this.eval_(ctx);
@@ -109,6 +112,7 @@ unlambda.runtime.eval_ = function(ctx) {
   if (ctx.step == ctx.step_limit) {
     ctx.current_variable = new unlambda.Variable(cur.op, v1, v2);
     ctx.state = unlambda.runtime.STATE.STEP_LIMIT;
+    ctx.next_apply = ctx.current_variable;
     return;
   }
   ctx.step++;
@@ -169,6 +173,7 @@ unlambda.runtime.applyRead = function(ctx, f, x) {
     ctx.step--;
     ctx.current_variable = new unlambda.Variable(unlambda.OP.APPLY, f, x);
     ctx.state = unlambda.runtime.STATE.INPUT_WAIT;
+    ctx.next_apply = ctx.current_variable;
   } else if (s == unlambda.runtime.IO_CODE.EOF) {
     ctx.current_character = s;
     ctx.current_variable = new unlambda.Variable(
