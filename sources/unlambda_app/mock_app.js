@@ -4,6 +4,7 @@ unlambda_app.MockApp = function() {
   this.app_context = new unlambda_app.AppContext();
   this.controller = createMockInstance(unlambda_app.Controller);
   this.control_panel = createMockInstance(page.ControlPanel);
+  this.current_code_panel = createMockInstance(page.CurrentCodePanel);
   this.input_code_panel = createMockInstance(page.InputCodePanel);
   this.input_panel = createMockInstance(page.InputPanel);
   this.output_panel = createMockInstance(page.OutputPanel);
@@ -20,6 +21,10 @@ unlambda_app.MockApp.prototype.getAppContext = function() {
 
 unlambda_app.MockApp.prototype.getControlPanel = function() {
   return this.control_panel;
+};
+
+unlambda_app.MockApp.prototype.getCurrentCodePanel = function() {
+  return this.current_code_panel;
 };
 
 unlambda_app.MockApp.prototype.getInputCodePanel = function() {

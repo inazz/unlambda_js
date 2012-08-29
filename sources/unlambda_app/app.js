@@ -8,6 +8,7 @@ unlambda_app.App = function(controller_factory, app_context, panel_factory) {
   this.controller = controller_factory(this);
   this.app_context = app_context;
   this.control_panel = panel_factory['control'](this);
+  this.current_code_panel = panel_factory['current_code'](this);
   this.input_code_panel = panel_factory['input_code'](this);
   this.input_panel = panel_factory['input'](this);
   this.output_panel = panel_factory['output'](this);
@@ -26,6 +27,8 @@ unlambda_app.App.create = function(window, doc){
   var panel_factory = {
     'control': function(app) {
       return new page.ControlPanel(app, dom_helper);},
+    'current_code': function(app) {
+      return new page.CurrentCodePanel(app, dom_helper);},
     'input_code': function(app) {
       return new page.InputCodePanel(app, dom_helper);},
     'input': function(app) {
@@ -41,6 +44,7 @@ unlambda_app.App.create = function(window, doc){
 unlambda_app.App.prototype.init = function() {
   this.controller.init();
   this.control_panel.init();
+  this.current_code_panel.init();
   this.input_code_panel.init();
   this.input_panel.init();
   this.output_panel.init();
@@ -58,6 +62,10 @@ unlambda_app.App.prototype.getAppContext = function() {
 
 unlambda_app.App.prototype.getControlPanel = function() {
   return this.control_panel;
+};
+
+unlambda_app.App.prototype.getCurrentCodePanel = function() {
+  return this.current_code_panel;
 };
 
 unlambda_app.App.prototype.getInputCodePanel = function() {

@@ -82,6 +82,7 @@ unlambda_app.Controller.prototype.pause = function() {
     return;
   }
   ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+  // TODO: fill next_apply.
   this.updateView();
 };
 
@@ -141,6 +142,7 @@ unlambda_app.Controller.prototype.onUnlambdaOutput = function(c) {
 
 unlambda_app.Controller.prototype.updateView = function() {
   this.app.getControlPanel().updateView();
+  this.app.getCurrentCodePanel().updateView();
   this.app.getInputCodePanel().updateView();
   this.app.getStatusPanel().updateView();
 };
