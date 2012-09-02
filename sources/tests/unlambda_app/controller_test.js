@@ -97,6 +97,9 @@ UnlambdaAppControllerTest.prototype.OnUnlambdaOutputRedirectToOutputPanel = func
 };
 
 UnlambdaAppControllerTest.prototype.Stop = function() {
+  this.controller.fillNextApplyIfRunning = createMockFunction();
+  expectCall(this.controller.fillNextApplyIfRunning)();
+
   UnlambdaAppControllerTest.expectUpdateView(this);
   this.controller.stop();
   var ctx = this.app.getAppContext();
@@ -109,10 +112,38 @@ UnlambdaAppControllerTest.prototype.PauseKeepRuntimeContext = function() {
   var original_runtime_context = {};
   ctx.runtime_context = original_runtime_context;
   UnlambdaAppControllerTest.expectUpdateView(this);
+  this.controller.fillNextApplyIfRunning = createMockFunction();
+  expectCall(this.controller.fillNextApplyIfRunning)();
 
   this.controller.pause();
   expectEq(unlambda_app.RUN_STATE.PAUSED, ctx.run_state);
   expectEq(original_runtime_context, ctx.runtime_context);
+};
+
+UnlambdaAppControllerTest.prototype.FillNextApplyIfRunningDoNothingWhenNotRunning = function() {
+  var ctx = this.app.getAppContext();
+  ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
+  this.controller.fillNextApplyIfRunning();
+  ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
+  this.controller.fillNextApplyIfRunning();
+  ctx.run_state = unlambda_app.RUN_STATE.INPUT_WAIT;
+  this.controller.fillNextApplyIfRunning();
+};
+
+UnlambdaAppControllerTest.prototype.FillNextApplyIfRunningCallUnlambdaRunToBlockImmidiate = function() {
+  var ctx = this.app.getAppContext();
+  var rctx = createMockInstance(unlambda.runtime.RuntimeContext);
+  ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
+  ctx.runtime_context = rctx;
+  rctx.step = 20;
+  rctx.step_limit = -1;
+  var given_step_limit;
+  expectCall(this.unl.run)(_).willOnce(function(rctx) {
+    given_step_limit = rctx.step_limit;
+  });
+  this.controller.fillNextApplyIfRunning();
+  expectEq(20, given_step_limit);
+  expectEq(-1, rctx.step_limit);
 };
 
 UnlambdaAppControllerTest.prototype.RunResumeThreadWithParamIfNotStopped = function() {

@@ -72,6 +72,7 @@ unlambda_app.Controller.prototype.setUpRuntimeStepLimit = function(ctx) {
 
 unlambda_app.Controller.prototype.stop = function() {
   var ctx = this.app.getAppContext();
+  this.fillNextApplyIfRunning();
   ctx.run_state = unlambda_app.RUN_STATE.STOPPED;
   this.updateView();
 };
@@ -81,9 +82,21 @@ unlambda_app.Controller.prototype.pause = function() {
   if (ctx.run_state == unlambda_app.RUN_STATE.STOPPED) {
     return;
   }
+  this.fillNextApplyIfRunning();
   ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
-  // TODO: fill next_apply.
   this.updateView();
+};
+
+unlambda_app.Controller.prototype.fillNextApplyIfRunning = function() {
+  var ctx = this.app.getAppContext();
+  if (ctx.run_state != unlambda_app.RUN_STATE.RUNNING)
+    return;
+  var rctx = ctx.runtime_context;
+  var original_step_limit = rctx.step_limit;
+
+  rctx.step_limit = rctx.step;
+  this.unl.run(rctx);
+  rctx.step_limit = original_step_limit;
 };
 
 // unlambda_app.RUN_MODE, int
