@@ -32,7 +32,8 @@ class SourceFiles
       'unlambda_app/run_state.js' => [],
       # page components.
       'page/control_panel.js' => ['util/dom_helper.js'],
-      'page/current_code_panel.js' => ['util/dom_helper.js'],
+      'page/current_code_panel.js' => [
+        'util/dom_helper.js', 'unlambda/unlambda.js'],
       'page/input_code_panel.js' => ['util/dom_helper.js'],
       'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],

@@ -8,3 +8,9 @@ code.error_snippet {
 span.error_code {
   background-color: #ffcccc;
 }
+
+span.next_apply {
+  border-width: 1px;
+  border-style: solid;
+  border-color: red;
+}

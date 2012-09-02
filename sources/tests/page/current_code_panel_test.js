@@ -39,3 +39,131 @@ PageCurrentCodePanelTest.prototype.onCheckBoxChangeUpdateView = function() {
   this.panel.onCheckBoxChange(ev);
   expectTrue(panel.show_mode);
 };
+
+PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfThereIsNoCode = function() {
+  this.panel.show_mode = true;
+  var ctx = this.app.getAppContext();
+  ctx.runtime_context = null;
+  expectCall(this.dom_helper.removeChildren)(
+    this.panel.current_variable_block);
+
+  this.panel.updateView();
+};
+
+PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfShowNodeIsFalse = function() {
+  this.panel.show_mode = false;
+  var ctx = this.app.getAppContext();
+  ctx.runtime_context = {}
+  ctx.runtime_context.current_variable =
+    new unlambda.Variable(unlambda.OP.I, null, null);
+
+  expectCall(this.dom_helper.removeChildren)(
+    this.panel.current_variable_block);
+
+  this.panel.updateView();
+};
+
+PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariable = function() {
+  this.panel.show_mode = true;
+  var ctx = this.app.getAppContext();
+  ctx.runtime_context = {}
+  // ` `ki ` ``s.a?b v
+  ctx.runtime_context.current_variable =
+    new unlambda.Variable(
+      unlambda.OP.APPLY,
+      new unlambda.Variable(
+        unlambda.OP.K1,
+        new unlambda.Variable(unlambda.OP.I, null, null),
+        null),
+      new unlambda.Variable(
+        unlambda.OP.APPLY,
+        new unlambda.Variable(
+          unlambda.OP.S2,
+          new unlambda.Variable(unlambda.OP.PRINT, "a", null),
+          new unlambda.Variable(unlambda.OP.COMPARE, "b", null)),
+        new unlambda.Variable(unlambda.OP.V, null, null)));
+  ctx.runtime_context.next_apply =
+    ctx.runtime_context.current_variable.v2;
+
+  expectCall(this.dom_helper.removeChildren)(
+    this.panel.current_variable_block);
+  // <span>`<span>`ki</span><span>`<span>``s.a?b</span><span>v</span></span>
+  var spans = [{}, {}, {}, {}, {}];
+  var texts = [{}, {}, {}, {}, {}];
+  expectCall(this.dom_helper.createElement)('span')
+    .willOnce(returnWith(spans[0]))
+    .willOnce(returnWith(spans[1]))
+    .willOnce(returnWith(spans[2]))
+    .willOnce(returnWith(spans[3]))
+    .willOnce(returnWith(spans[4]));
+  expectCall(this.dom_helper.createTextNode)()
+    .willOnce(returnWith(texts[0]))
+    .willOnce(returnWith(texts[1]))
+    .willOnce(returnWith(texts[2]))
+    .willOnce(returnWith(texts[3]))
+    .willOnce(returnWith(texts[4]));
+  expectCall(this.dom_helper.appendChild)(
+    this.panel.current_variable_block, spans[0]);
+  expectCall(this.dom_helper.appendChild)(spans[0], texts[0]);
+  expectCall(this.dom_helper.appendChild)(spans[0], spans[1]);
+  expectCall(this.dom_helper.appendChild)(spans[0], spans[2]);
+  expectCall(this.dom_helper.appendChild)(spans[1], texts[1]);
+  expectCall(this.dom_helper.appendChild)(spans[2], texts[2]);
+  expectCall(this.dom_helper.appendChild)(spans[2], spans[3]);
+  expectCall(this.dom_helper.appendChild)(spans[2], spans[4]);
+  expectCall(this.dom_helper.appendChild)(spans[3], texts[3]);
+  expectCall(this.dom_helper.appendChild)(spans[4], texts[4]);
+  expectCall(this.dom_helper.appendData)(texts[0], "`");
+  expectCall(this.dom_helper.appendData)(texts[1], "`k");
+  expectCall(this.dom_helper.appendData)(texts[1], "i");
+  expectCall(this.dom_helper.appendData)(texts[2], "`");
+  expectCall(this.dom_helper.appendData)(texts[3], "``s");
+  expectCall(this.dom_helper.appendData)(texts[3], ".a");
+  expectCall(this.dom_helper.appendData)(texts[3], "?b");
+  expectCall(this.dom_helper.appendData)(texts[4], "v");
+  expectCall(this.dom_helper.addClass)(spans[2], "next_apply");
+  this.panel.updateView();
+};
+
+PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariableWithC1 = function() {
+  this.panel.show_mode = true;
+  var ctx = this.app.getAppContext();
+  ctx.runtime_context = {}
+  // `i <cont>
+  var var_c1 = new unlambda.Variable(unlambda.OP.C1, null, null);
+
+  ctx.runtime_context.current_variable = 
+    new unlambda.Variable(
+      unlambda.OP.APPLY,
+      new unlambda.Variable(unlambda.OP.I, null, null),
+      var_c1);
+  var_c1.v1 = ctx.runtime_context.current_variable;
+  ctx.runtime_context.next_apply = ctx.runtime_context.current_variable;
+
+  expectCall(this.dom_helper.removeChildren)(
+    this.panel.current_variable_block);
+  // <span>`<span>i</span><span><cont></span></span>
+  var spans = [{}, {}, {}];
+  var texts = [{}, {}, {}];
+  expectCall(this.dom_helper.createElement)('span')
+    .willOnce(returnWith(spans[0]))
+    .willOnce(returnWith(spans[1]))
+    .willOnce(returnWith(spans[2]));
+  expectCall(this.dom_helper.createTextNode)()
+    .willOnce(returnWith(texts[0]))
+    .willOnce(returnWith(texts[1]))
+    .willOnce(returnWith(texts[2]));
+  expectCall(this.dom_helper.appendChild)(
+    this.panel.current_variable_block, spans[0]);
+  expectCall(this.dom_helper.appendChild)(spans[0], texts[0]);
+  expectCall(this.dom_helper.appendChild)(spans[0], spans[1]);
+  expectCall(this.dom_helper.appendChild)(spans[0], spans[2]);
+  expectCall(this.dom_helper.appendChild)(spans[1], texts[1]);
+  expectCall(this.dom_helper.appendChild)(spans[2], texts[2]);
+  expectCall(this.dom_helper.appendData)(texts[0], "`");
+  expectCall(this.dom_helper.appendData)(texts[1], "i");
+  expectCall(this.dom_helper.appendData)(texts[2], "<cont>");
+  expectCall(this.dom_helper.addClass)(spans[0], "next_apply");
+  this.panel.updateView();
+};
+
