@@ -332,7 +332,7 @@ UnlambdaAppControllerTest.prototype.Run_KeepRunStepIfStilRemainingStep = functio
   expectEq(unlambda_app.RUN_STATE.RUNNING, ctx.run_state);
 };
 
-UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak = function() {
+UnlambdaAppControllerTest.prototype.Run_KeepRunIfMaxStepBreak = function() {
   var ctx = this.app.getAppContext();
   ctx.step_limit = -1;
   ctx.run_state = unlambda_app.RUN_STATE.RUNNING;
@@ -340,6 +340,7 @@ UnlambdaAppControllerTest.prototype.Run_KeepRunWithoutUpdateViewIfMaxStepBreak =
   ctx.runtime_context = createMockInstance(unlambda.runtime.RuntimeContext);
   ctx.runtime_context.step = 0;
   ctx.runtime_context.step_limit = unlambda_app.Controller.MAX_BURST_STEP;;
+  UnlambdaAppControllerTest.expectUpdateView(this);
 
   expectCall(this.unl.run)(ctx.runtime_context).willOnce(function (ctx) {
     ctx.state = unlambda.runtime.STATE.STEP_LIMIT;

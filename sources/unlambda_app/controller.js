@@ -42,10 +42,10 @@ unlambda_app.Controller.prototype.run_ = function() {
       ctx.run_state = unlambda_app.RUN_STATE.PAUSED;
       this.updateView();
       return false;
-    } else if (ctx.run_mode == unlambda_app.RUN_MODE.RUN_STEP){
+    } else {
       this.updateView();
+      return true;
     }
-    return true;
   default:
     throw 'unexpected runtime result!';
   }
