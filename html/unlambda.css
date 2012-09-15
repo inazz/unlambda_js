@@ -2,7 +2,7 @@
 code.error_snippet {
   background-color: #cccccc;
 	display: block;
-	white-space: pre;
+	white-space: pre-wrap;
 }
 
 span.error_code {
@@ -13,4 +13,17 @@ span.next_apply {
   border-width: 1px;
   border-style: solid;
   border-color: red;
+}
+
+#output_block {
+  font-family: monospace;
+	white-space: pre-wrap;
+}
+
+span.echo_back {
+  background-color: #ffffdd;
+}
+
+#current_variable_block {
+  font-family: monospace;
 }
