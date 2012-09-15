@@ -33,10 +33,10 @@ page.CurrentCodePanel.prototype.updateView = function() {
   var ctx = this.app.getAppContext();
   this.dom_helper.removeChildren(this.current_variable_block);
   if (this.show_mode && ctx.runtime_context &&
-      ctx.runtime_context.current_variable) {
+      ctx.runtime_context.variable) {
     this.createDomDfs_(
       this.current_variable_block, null,
-      ctx.runtime_context.current_variable,
+      ctx.runtime_context.variable,
       ctx.runtime_context.next_apply, false);
   }
 };

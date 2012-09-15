@@ -54,7 +54,7 @@ PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfShowNodeIsFalse = functio
   this.panel.show_mode = false;
   var ctx = this.app.getAppContext();
   ctx.runtime_context = {}
-  ctx.runtime_context.current_variable =
+  ctx.runtime_context.variable =
     new unlambda.Variable(unlambda.OP.I, null, null);
 
   expectCall(this.dom_helper.removeChildren)(
@@ -68,7 +68,7 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariable = function() {
   var ctx = this.app.getAppContext();
   ctx.runtime_context = {}
   // ` `ki ` ``s.a?b v
-  ctx.runtime_context.current_variable =
+  ctx.runtime_context.variable =
     new unlambda.Variable(
       unlambda.OP.APPLY,
       new unlambda.Variable(
@@ -83,7 +83,7 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariable = function() {
           new unlambda.Variable(unlambda.OP.COMPARE, "b", null)),
         new unlambda.Variable(unlambda.OP.V, null, null)));
   ctx.runtime_context.next_apply =
-    ctx.runtime_context.current_variable.v2;
+    ctx.runtime_context.variable.v2;
 
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
@@ -132,13 +132,13 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariableWithC1 = functi
   // `i <cont>
   var var_c1 = new unlambda.Variable(unlambda.OP.C1, null, null);
 
-  ctx.runtime_context.current_variable = 
+  ctx.runtime_context.variable = 
     new unlambda.Variable(
       unlambda.OP.APPLY,
       new unlambda.Variable(unlambda.OP.I, null, null),
       var_c1);
-  var_c1.v1 = ctx.runtime_context.current_variable;
-  ctx.runtime_context.next_apply = ctx.runtime_context.current_variable;
+  var_c1.v1 = ctx.runtime_context.variable;
+  ctx.runtime_context.next_apply = ctx.runtime_context.variable;
 
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
