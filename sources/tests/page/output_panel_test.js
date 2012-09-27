@@ -37,9 +37,11 @@ PageOutputPanelTest.prototype.AppendOutputCreatesSpanOnce = function() {
   expectCall(this.dom_helper.appendChild)(this.panel.output_block, span);
   expectCall(this.dom_helper.appendChild)(span, text_node);
   expectCall(this.dom_helper.appendData)(text_node, 'hoge');
+  expectCall(this.dom_helper.scrollToBottom)(this.panel.output_block);
   this.panel.appendOutput('hoge');
 
   expectCall(this.dom_helper.appendData)(text_node, 'fuga');
+  expectCall(this.dom_helper.scrollToBottom)(this.panel.output_block);
   this.panel.appendOutput('fuga');
 };
 
@@ -52,9 +54,11 @@ PageOutputPanelTest.prototype.AppendInputEchoBackCreatesSpanOnce = function() {
   expectCall(this.dom_helper.appendChild)(this.panel.output_block, span);
   expectCall(this.dom_helper.appendChild)(span, text_node);
   expectCall(this.dom_helper.appendData)(text_node, 'hoge');
+  expectCall(this.dom_helper.scrollToBottom)(this.panel.output_block);
   this.panel.appendInputEchoBack('hoge');
 
   expectCall(this.dom_helper.appendData)(text_node, 'fuga');
+  expectCall(this.dom_helper.scrollToBottom)(this.panel.output_block);
   this.panel.appendInputEchoBack('fuga');
 };
 
@@ -84,6 +88,8 @@ PageOutputPanelTest.prototype.OutputCreatesNewSpanWhenClassNameChanged = functio
   expectCall(this.dom_helper.appendChild)(this.panel.output_block, span3);
   expectCall(this.dom_helper.appendChild)(span3, text_node3);
   expectCall(this.dom_helper.appendData)(text_node3, 'c');
+
+  expectCall(this.dom_helper.scrollToBottom)(this.panel.output_block).times(3);
 
   this.panel.appendOutput('a');
   this.panel.appendInputEchoBack('b');

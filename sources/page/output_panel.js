@@ -24,10 +24,12 @@ page.OutputPanel.prototype.clear = function() {
 
 page.OutputPanel.prototype.appendOutput = function(str) {
   this.appendSpanTextWithClassName_('output', str);
+  this.dom_helper.scrollToBottom(this.output_block);
 };
 
 page.OutputPanel.prototype.appendInputEchoBack = function(str) {
   this.appendSpanTextWithClassName_('echo_back', str);
+  this.dom_helper.scrollToBottom(this.output_block);
 };
 
 page.OutputPanel.prototype.appendSpanTextWithClassName_ = function(classname, str) {

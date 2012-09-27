@@ -73,3 +73,8 @@ util.DomHelper.prototype.enable = function(dom, flag) {
 util.DomHelper.prototype.isChecked = function(dom) {
   return !!dom.checked
 };
+
+// HtmlElement
+util.DomHelper.prototype.scrollToBottom = function(dom) {
+  dom.scrollTop = dom.scrollHeight;
+};

@@ -122,3 +122,11 @@ UtilDomHelperTest.prototype.IsChecked = function() {
   dom.checked = "checked";
   expectTrue(this.dom_helper.isChecked(dom));
 };
+
+UtilDomHelperTest.prototype.ScrollToBottom = function() {
+  var dom = {}
+  dom.scrollHeight = 100;
+  dom.scrollTop = 0;
+  this.dom_helper.scrollToBottom(dom);
+  expectEq(100, dom.scrollTop);
+};
