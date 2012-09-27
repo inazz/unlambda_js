@@ -1,8 +1,47 @@
 
+
+#container {
+  margin-left: auto;
+  margin-right: auto;
+  width: 960px;
+}
+
+#left_side {
+  margin-left: 0px;
+  margin-right: 0px;
+  width: 40%;
+  float: left;
+}
+
+#right_side {
+  margin-left: 1%;
+  margin-right: 0px;
+  width: 59%;
+  float: left;
+}
+
+#code {
+  width: 100%;
+  height: 8em;
+}
+
+#input {
+  width: 100%;
+  height: 3em;
+}
+
+span.block_name {
+  border-left: 3px solid #999999;
+  padding-left: 0.4em;
+  margin-top: 1em;
+  margin-bottom: 0.4em;
+  display: block;
+}
+
 code.error_snippet {
-  background-color: #cccccc;
-	display: block;
-	white-space: pre-wrap;
+  background-color: #eeeeee;
+  display: block;
+  white-space: pre-wrap;
 }
 
 span.error_code {
@@ -16,14 +55,20 @@ span.next_apply {
 }
 
 #output_block {
+  min-height: 8em;
+  max-height: 20em;
   font-family: monospace;
-	white-space: pre-wrap;
+  white-space: pre-wrap;
+  overflow: auto;
 }
 
 span.echo_back {
-  background-color: #ffffdd;
+  background-color: #eeeeee;
 }
 
+#status {
+  padding-left: 1em;
+}
 #current_variable_block {
   font-family: monospace;
 }

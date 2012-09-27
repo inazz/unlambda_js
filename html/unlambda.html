@@ -1,47 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
+<title>Unlambda Interpreter</title>
 <link rel="stylesheet" type="text/css" href="unlambda.css" />
 <script type="text/javascript" src="unlambda.js"></script>
 </head>
 <body>
+<div id="container">
 
 <div id="control_block">
-	<input id="stop" type="button" value="Stop" />
-	<input id="pause" type="button" value="Pause" />
-	<input id="run" type="button" value="Run" />
-	<input id="run_step" type="button" value="Step by Step" />
-	<input id="step" type="button" value="Just One Step" />
+	<span id="control_buttons">
+		<input id="stop" type="button" value="Stop" />
+		<input id="pause" type="button" value="Pause" />
+		<input id="run" type="button" value="Run" />
+		<input id="run_step" type="button" value="Step by Step" />
+		<input id="step" type="button" value="Just One Step" />
+	</span>
+	<span id="status">
+		<span>status: <span id="current_status"></span></span>
+		<span>step: <span id="current_step"></span></span>
+	</span>
 </div>
 
-<div id="status_block">
-	<span>status: <span id="current_status"></span></span>
-	<span>step: <span id="current_step"></span></span>
-</div>
-<div id="compile_error_block"></div>
-<div id="output_block"></div>
-
-<div id="code_block">
-	<select id="code_selector">
-		<option value="">Select for sample code...</option>
-		<option value="hello_world">Hello, world!</option>
-		<option value="hello_world_short">Hello, world! (short)</option>
-	</select><br/>
-	<textarea id="code"></textarea>
-	<div>
+<div id="left_side">
+	<span class="block_name">Unlambda Code</span>
+	<div id="compile_error_block"></div>
+	<div id="code_block">
+		<select id="code_selector">
+			<option value="">Select for sample code...</option>
+			<option value="hello_world">Hello, world!</option>
+			<option value="hello_world_short">Hello, world! (short)</option>
+		</select>
 		<label><input id="show_current_variable" type="checkbox" name="show_current_variable" value="1" />Show code while execution.</label>
+		<br/>
+		<textarea id="code">`````````````.H.e.l.l.o.,. .w.o.r.l.d.!i</textarea>
+	</div>
+	<div id="input_block">
+		<span class="block_name">User Input</span>
+		<textarea id="input"></textarea><br />
+		<span>
+			<label><input id="input_wait" type="radio" name="eof_behavior" value="0" checked/>Wait for input</label>
+			<label><input id="input_eof" type="radio" name="eof_behavior" value="1"/>EOF</label>
+			<label><input id="echo_back" type="checkbox" name="echo_back" value="1" checked/>Echo back</label>
+		</span>
+	</div>
+</div>
+
+<div id="right_side">
+	<div>
+		<span class="block_name">Output</span>
+		<div id="output_block">Hello, world!</div>
+	</div>
+	<div>
+		<span class="block_name">Current Variable</span>
 		<div id="current_variable_block"></div>
 	</div>
 </div>
 
-<div id="input_block">
-	<textarea id="input"></textarea>
-	<span>
-	<label><input id="input_wait" type="radio" name="eof_behavior" value="0" checked/>Wait for input</label>
-	<label><input id="input_eof" type="radio" name="eof_behavior" value="1"/>EOF</label>
-	<label><input id="echo_back" type="checkbox" name="echo_back" value="1" checked/>Echo back</label>
-	</span>
 </div>
-
 </body>
 </html>
