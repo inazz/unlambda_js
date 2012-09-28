@@ -12,6 +12,10 @@ util.DomHelper.prototype.get = function(id) {
   return this.doc.getElementById(id);
 };
 
+util.DomHelper.prototype.getBody = function() {
+  return this.doc.body;
+};
+
 // HtmlElement, String, Object, function(Event)
 util.DomHelper.prototype.addEventListener = function(dom, type, obj, func) {
   dom.addEventListener(

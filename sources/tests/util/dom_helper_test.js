@@ -13,6 +13,11 @@ UtilDomHelperTest.prototype.Get = function() {
   expectEq(dom, this.dom_helper.get('the_id'));
 };
 
+UtilDomHelperTest.prototype.GetBody = function() {
+  this.document.body = {};
+  expectEq(this.document.body, this.dom_helper.getBody());
+};
+
 UtilDomHelperTest.prototype.AddEventListener = function() {
   var dom = {};
   dom.addEventListener = createMockFunction();
