@@ -6,15 +6,18 @@ function PageCurrentCodePanelTest() {
   this.app.current_code_panel = this.panel;
 
   this.panel.show_current_variable_checkbox = {};
+  this.panel.current_variable_container = {};
   this.panel.current_variable_block = {};
 }
 registerTestSuite(PageCurrentCodePanelTest);
 
 PageCurrentCodePanelTest.prototype.initSetUpHandler = function() {
-  var checkbox = {}, divBlock = {};
+  var checkbox = {}, divContainer = {}, divBlock = {};
   this.panel.onCheckBoxChange = createMockFunction();
   expectCall(this.dom_helper.get)('show_current_variable').willOnce(
     returnWith(checkbox));
+  expectCall(this.dom_helper.get)('current_variable_container').willOnce(
+    returnWith(divContainer));
   expectCall(this.dom_helper.get)('current_variable_block').willOnce(
     returnWith(divBlock));
   
@@ -24,6 +27,7 @@ PageCurrentCodePanelTest.prototype.initSetUpHandler = function() {
 
   this.panel.init();
   expectEq(checkbox, this.panel.show_current_variable_checkbox);
+  expectEq(divContainer, this.panel.current_variable_container);
   expectEq(divBlock, this.panel.current_variable_block);
 };
 
@@ -46,11 +50,13 @@ PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfThereIsNoCode = function(
   ctx.runtime_context = null;
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
+  expectCall(this.dom_helper.setDisplay)(
+    this.panel.current_variable_container, '');
 
   this.panel.updateView();
 };
 
-PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfShowNodeIsFalse = function() {
+PageCurrentCodePanelTest.prototype.UpdateViewHideDomIfShowNodeIsFalse = function() {
   this.panel.show_mode = false;
   var ctx = this.app.getAppContext();
   ctx.runtime_context = {}
@@ -59,6 +65,8 @@ PageCurrentCodePanelTest.prototype.UpdateViewClearDomIfShowNodeIsFalse = functio
 
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
+  expectCall(this.dom_helper.setDisplay)(
+    this.panel.current_variable_container, 'none');
 
   this.panel.updateView();
 };
@@ -87,6 +95,9 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariable = function() {
 
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
+  expectCall(this.dom_helper.setDisplay)(
+    this.panel.current_variable_container, '');
+
   // <span>`<span>`ki</span><span>`<span>``s.a?b</span><span>v</span></span>
   var spans = [{}, {}, {}, {}, {}];
   var texts = [{}, {}, {}, {}, {}];
@@ -142,6 +153,9 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariableWithC1 = functi
 
   expectCall(this.dom_helper.removeChildren)(
     this.panel.current_variable_block);
+  expectCall(this.dom_helper.setDisplay)(
+    this.panel.current_variable_container, '');
+
   // <span>`<span>i</span><span><cont></span></span>
   var spans = [{}, {}, {}];
   var texts = [{}, {}, {}];

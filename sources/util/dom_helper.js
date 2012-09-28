@@ -75,6 +75,13 @@ util.DomHelper.prototype.isChecked = function(dom) {
 };
 
 // HtmlElement
+util.DomHelper.prototype.setDisplay = function(dom, value) {
+  if (typeof(dom.style) == 'undefined')
+    dom.style = {};
+  dom.style.display = value;
+};
+
+// HtmlElement
 util.DomHelper.prototype.scrollToBottom = function(dom) {
   dom.scrollTop = dom.scrollHeight;
 };

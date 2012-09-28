@@ -123,6 +123,15 @@ UtilDomHelperTest.prototype.IsChecked = function() {
   expectTrue(this.dom_helper.isChecked(dom));
 };
 
+UtilDomHelperTest.prototype.SetDisplay = function() {
+  var dom = {}
+  this.dom_helper.setDisplay(dom, 'none');
+  expectEq('none', dom.style.display);
+  
+  this.dom_helper.setDisplay(dom, '');
+  expectEq('', dom.style.display);
+};
+
 UtilDomHelperTest.prototype.ScrollToBottom = function() {
   var dom = {}
   dom.scrollHeight = 100;
