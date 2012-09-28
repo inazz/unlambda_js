@@ -41,6 +41,7 @@ class SourceFiles
         'util/dom_helper.js', 'unlambda_app/run_state.js'],
       # utility.
       'util/dom_helper.js' => [],
+      'util/js_loader.js' => ['util/dom_helper.js'],
       'util/loop_thread.js' => [],
       'util/loop_thread_factory.js' => ['util/loop_thread.js'],
       # unlambda tests
@@ -77,6 +78,7 @@ class SourceFiles
         'page/status_panel.js'],
       # utility tests.
       'tests/util/dom_helper_test.js' => ['util/dom_helper.js'],
+      'tests/util/js_loader_test.js' => ['util/js_loader.js'],
       'tests/util/loop_thread_test.js' => ['util/loop_thread.js'],
       'tests/util/loop_thread_factory_test.js' => [
         'util/loop_thread_factory.js'],
