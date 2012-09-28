@@ -17,10 +17,11 @@ class SourceFiles
       # app logics.
       'unlambda_app/app.js' => [
         'unlambda_app/app_context.js', 'unlambda_app/controller.js',
+        'unlambda/unlambda.js', 'util/dom_helper.js', 'util/js_loader.js',
         'page/control_panel.js', 'page/current_code_panel.js',
         'page/input_code_panel.js',
         'page/input_panel.js', 'page/output_panel.js',
-        'page/status_panel.js', 'unlambda/unlambda.js'],
+        'page/status_panel.js'],
       'unlambda_app/app_context.js' => [
         'unlambda/runtime.js',
         'unlambda_app/run_mode.js', 'unlambda_app/run_state.js'],
@@ -34,7 +35,8 @@ class SourceFiles
       'page/control_panel.js' => ['util/dom_helper.js'],
       'page/current_code_panel.js' => [
         'util/dom_helper.js', 'unlambda/unlambda.js'],
-      'page/input_code_panel.js' => ['util/dom_helper.js'],
+      'page/input_code_panel.js' => [
+        'util/dom_helper.js', 'util/js_loader.js'],
       'page/input_panel.js' => ['util/dom_helper.js', 'unlambda/runtime.js'],
       'page/output_panel.js' => ['util/dom_helper.js'],
       'page/status_panel.js' => [

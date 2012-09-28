@@ -23,6 +23,7 @@ unlambda_app.App.create = function(window, doc){
     return new unlambda_app.Controller(app, unl, loop_thread_factory);
   };
   var dom_helper = new util.DomHelper(doc);
+  var js_loader = new util.JsLoader(dom_helper);
   var app_context = new unlambda_app.AppContext();
   var panel_factory = {
     'control': function(app) {
@@ -30,7 +31,7 @@ unlambda_app.App.create = function(window, doc){
     'current_code': function(app) {
       return new page.CurrentCodePanel(app, dom_helper);},
     'input_code': function(app) {
-      return new page.InputCodePanel(app, dom_helper);},
+      return new page.InputCodePanel(app, dom_helper, js_loader);},
     'input': function(app) {
       return new page.InputPanel(app, dom_helper);},
     'output': function(app) {

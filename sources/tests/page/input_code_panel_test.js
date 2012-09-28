@@ -2,7 +2,9 @@
 function PageInputCodePanelTest() {
   this.app = new unlambda_app.MockApp();
   this.dom_helper = createMockInstance(util.DomHelper);
-  this.panel = new page.InputCodePanel(this.app, this.dom_helper);
+  this.js_loader = createMockInstance(util.JsLoader);
+  this.panel = new page.InputCodePanel(
+    this.app, this.dom_helper, this.js_loader);
   this.app.input_code_panel = this.panel;
   this.panel.code_area = {};
   this.panel.code_selector = {};
@@ -66,6 +68,35 @@ PageInputCodePanelTest.prototype.OnSelectorChangeHelloWorldShort = function() {
   expectCall(this.dom_helper.setValue)(
     this.panel.code_area, page.InputCodePanel.HELLO_WORLD_SHORT_CODE);
   this.panel.onSelectorChange();
+};
+
+PageInputCodePanelTest.prototype.OnSelectorChangeAdventureFirstTime = function() {
+  expectCall(this.dom_helper.getValue)(this.panel.code_selector)
+    .willOnce(returnWith("adventure"));
+  expectCall(this.dom_helper.setValue)(
+    this.panel.code_area, page.InputCodePanel.LOADING_MESSAGE);
+  expectCall(this.js_loader.load)(
+    page.InputCodePanel.ADVENTURE_LOADER_URL);
+
+  this.panel.onSelectorChange();
+};
+
+PageInputCodePanelTest.prototype.OnSelectorChangeAdventureWhenLoadFinished = function() {
+  page.InputCodePanel.ADVENTURE_CODE = 'ADVENTURE_CODE';
+  expectCall(this.dom_helper.getValue)(this.panel.code_selector)
+    .willOnce(returnWith("adventure"));
+  expectCall(this.dom_helper.setValue)(this.panel.code_area, 'ADVENTURE_CODE');
+
+  this.panel.onSelectorChange();
+};
+
+PageInputCodePanelTest.prototype.OnAdventureLoadComplete = function() {
+  this.panel.onSelectorChange = createMockFunction();
+  expectCall(this.panel.onSelectorChange)();
+
+  this.panel.onAdventureLoadComplete('HOGE');
+
+  expectEq('HOGE', page.InputCodePanel.ADVENTURE_CODE);
 };
 
 PageInputCodePanelTest.prototype.UpdateViewEnableEditWhenStopped = function() {
