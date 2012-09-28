@@ -82,6 +82,16 @@ util.DomHelper.prototype.setDisplay = function(dom, value) {
 };
 
 // HtmlElement
+util.DomHelper.prototype.setCharset = function(dom, charset) {
+  dom.charset = charset;
+};
+
+// HtmlElement
+util.DomHelper.prototype.setSrc = function(dom, src) {
+  dom.src = src;
+};
+
+// HtmlElement
 util.DomHelper.prototype.scrollToBottom = function(dom) {
   dom.scrollTop = dom.scrollHeight;
 };

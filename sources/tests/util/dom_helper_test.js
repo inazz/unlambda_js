@@ -132,6 +132,19 @@ UtilDomHelperTest.prototype.SetDisplay = function() {
   expectEq('', dom.style.display);
 };
 
+UtilDomHelperTest.prototype.SetCharset = function() {
+  var dom = {}
+  this.dom_helper.setCharset(dom, 'utf-8');
+  expectEq('utf-8', dom.charset);
+};
+
+UtilDomHelperTest.prototype.SetSrc = function() {
+  var dom = {}
+  var url = "http://そっちはソースだ.com";
+  this.dom_helper.setSrc(dom, url);
+  expectEq(url, dom.src);
+};
+
 UtilDomHelperTest.prototype.ScrollToBottom = function() {
   var dom = {}
   dom.scrollHeight = 100;
