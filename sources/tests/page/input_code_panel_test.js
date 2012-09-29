@@ -62,11 +62,19 @@ PageInputCodePanelTest.prototype.OnSelectorChangeHelloWorld = function() {
   this.panel.onSelectorChange();
 };
 
-PageInputCodePanelTest.prototype.OnSelectorChangeHelloWorldShort = function() {
+PageInputCodePanelTest.prototype.OnSelectorChangeEcho = function() {
   expectCall(this.dom_helper.getValue)(this.panel.code_selector)
-    .willOnce(returnWith("hello_world_short"));
+    .willOnce(returnWith("echo"));
   expectCall(this.dom_helper.setValue)(
-    this.panel.code_area, page.InputCodePanel.HELLO_WORLD_SHORT_CODE);
+    this.panel.code_area, page.InputCodePanel.ECHO_CODE);
+  this.panel.onSelectorChange();
+};
+
+PageInputCodePanelTest.prototype.OnSelectorChangeEchoShort = function() {
+  expectCall(this.dom_helper.getValue)(this.panel.code_selector)
+    .willOnce(returnWith("echo_short"));
+  expectCall(this.dom_helper.setValue)(
+    this.panel.code_area, page.InputCodePanel.ECHO_SHORT_CODE);
   this.panel.onSelectorChange();
 };
 

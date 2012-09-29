@@ -13,6 +13,8 @@ page.InputCodePanel = function(app, dom_helper, js_loader) {
 
 page.InputCodePanel.HELLO_WORLD_CODE = "`````````````.H.e.l.l.o.,. .w.o.r.l.d.!i";
 page.InputCodePanel.HELLO_WORLD_SHORT_CODE = "`.!`.d`.l`.r``.w`. `.,``.l`c`.H.e.oi";
+page.InputCodePanel.ECHO_CODE = "```sii```si`k`ci`@|";
+page.InputCodePanel.ECHO_SHORT_CODE = "``ci`c`@|";
 page.InputCodePanel.ADVENTURE_CODE = ""; // delay load.
 page.InputCodePanel.ADVENTURE_LOADER_URL = './adventure_loader.js';
 page.InputCodePanel.LOADING_MESSAGE = "Loading...";
@@ -46,6 +48,12 @@ page.InputCodePanel.prototype.onSelectorChange = function(ev) {
   } else if (sample_name == "hello_world_short") {
     this.dom_helper.setValue(
       this.code_area, page.InputCodePanel.HELLO_WORLD_SHORT_CODE);
+  } else if (sample_name == "echo") {
+    this.dom_helper.setValue(
+      this.code_area, page.InputCodePanel.ECHO_CODE);
+  } else if (sample_name == "echo_short") {
+    this.dom_helper.setValue(
+      this.code_area, page.InputCodePanel.ECHO_SHORT_CODE);
   } else if (sample_name == "adventure") {
     if (page.InputCodePanel.ADVENTURE_CODE == "") {
       this.dom_helper.setValue(
