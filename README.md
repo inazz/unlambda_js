@@ -6,13 +6,13 @@ unlambda interpreter implemented by javascript.
 Javascript code is tested by google-js-test.
 To install google-js-test, read and run scripts/install_gjstest.rb
 
+```shell
 html/
   html, css and compiled .js files.
 sources/
   Javascript sources to build html/unlambda.js.
   Tests are under sources/tests/ directory.
 scripts/
-  various scripts..
   builder.rb
     Run test and build "html/unlambda.js"
   create_advent_loader.rb
@@ -23,3 +23,4 @@ scripts/
   source_files.rb
     describe dependency between files under "sources/" directory.
     This file is a library used by "builder.rb". not for execution.
+```
