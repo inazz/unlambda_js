@@ -14,8 +14,7 @@ page.InputCodePanel = function(app, dom_helper, js_loader) {
 page.InputCodePanel.HELLO_WORLD_CODE = "`````````````.H.e.l.l.o.,. .w.o.r.l.d.!i";
 page.InputCodePanel.HELLO_WORLD_SHORT_CODE = "`.!`.d`.l`.r``.w`. `.,``.l`c`.H.e.oi";
 page.InputCodePanel.ADVENTURE_CODE = ""; // delay load.
-page.InputCodePanel.ADVENTURE_LOADER_URL =
-  'https://raw.github.com/inazz/unlambda_js/master/html/adventure_loader.js';
+page.InputCodePanel.ADVENTURE_LOADER_URL = './adventure_loader.js';
 page.InputCodePanel.LOADING_MESSAGE = "Loading...";
 
 page.InputCodePanel.prototype.init = function() {
