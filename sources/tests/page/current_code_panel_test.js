@@ -181,3 +181,30 @@ PageCurrentCodePanelTest.prototype.UpdateViewCreateDomForVariableWithC1 = functi
   this.panel.updateView();
 };
 
+PageCurrentCodePanelTest.prototype.UpdateViewStopsEvenIfCodeIsCrazyHuge = function() {
+  this.panel.show_mode = true;
+  var ctx = this.app.getAppContext();
+  ctx.runtime_context = {}
+  var var_inf = new unlambda.Variable(unlambda.OP.APPLY, null, null);
+  var_inf.v1 = var_inf.v2 = var_inf
+  ctx.runtime_context.variable = var_inf;
+  ctx.runtime_context.next_apply = var_inf;
+
+  expectCall(this.dom_helper.removeChildren)(
+    this.panel.current_variable_block);
+  expectCall(this.dom_helper.setDisplay)(
+    this.panel.current_variable_container, '');
+
+  expectCall(this.dom_helper.createElement)('span')
+    .willRepeatedly(returnWith({}));
+  expectCall(this.dom_helper.createTextNode)()
+    .willRepeatedly(returnWith({}));
+  expectCall(this.dom_helper.appendChild)(_, _)
+    .willRepeatedly(function(){});
+  expectCall(this.dom_helper.appendData)(_, _)
+    .willRepeatedly(function(){});
+  expectCall(this.dom_helper.addClass)(_, _)
+    .willRepeatedly(function(){});
+  this.panel.updateView();
+};
+

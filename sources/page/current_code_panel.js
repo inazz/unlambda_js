@@ -39,15 +39,26 @@ page.CurrentCodePanel.prototype.updateView = function() {
                              (this.show_mode ? "": "none"));
   if (this.show_mode && ctx.runtime_context &&
       ctx.runtime_context.variable) {
+    var limitter = {allowed_depth: 500, allowed_nodes: 2000};
     this.createDomDfs_(
       this.current_variable_block, null,
       ctx.runtime_context.variable,
-      ctx.runtime_context.next_apply, false);
+      ctx.runtime_context.next_apply, false, limitter);
   }
 };
 
 page.CurrentCodePanel.prototype.createDomDfs_ = function(
-  parent, text, variable, next_apply, is_apply_arg) {
+  parent, text, variable, next_apply, is_apply_arg, limitter) {
+  if (limitter.allowed_depth <= 0 ||
+      limitter.allowed_nodes <= 0) {
+    var span = this.dom_helper.createElement('span');
+    this.dom_helper.appendChild(parent, span);
+    text = this.dom_helper.createTextNode();
+    this.dom_helper.appendChild(span, text);
+    this.dom_helper.appendData(text, '<...>');
+    return;
+  }
+  limitter.allowed_nodes--;
   var is_apply = (variable.op == unlambda.OP.APPLY);
   if (is_apply || is_apply_arg) {
     var span = this.dom_helper.createElement('span');
@@ -75,9 +86,15 @@ page.CurrentCodePanel.prototype.createDomDfs_ = function(
     }
   }
   if (variable.v1 != null) {
-    this.createDomDfs_(parent, text, variable.v1, next_apply, is_apply);
+    limitter.allowed_depth--;
+    this.createDomDfs_(
+      parent, text, variable.v1, next_apply, is_apply, limitter);
+    limitter.allowed_depth++;
   }
   if (variable.v2 != null) {
-    this.createDomDfs_(parent, text, variable.v2, next_apply, is_apply);
+    limitter.allowed_depth--;
+    this.createDomDfs_(
+      parent, text, variable.v2, next_apply, is_apply, limitter);
+    limitter.allowed_depth++;
   }
 };
