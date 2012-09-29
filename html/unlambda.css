@@ -20,6 +20,11 @@
   float: left;
 }
 
+#explanation {
+  padding-top: 50px;
+  clear: both;
+}
+
 #code {
   width: 100%;
   height: 8em;

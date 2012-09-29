@@ -60,6 +60,43 @@
 	</div>
 </div>
 
+<div id="explanation">
+	<hr>
+	<p>
+	<a href="http://en.wikipedia.org/wiki/Unlambda">Unlambda</a> is small functional language consists of only 11 primitive functions (<code>s k i v c d .X e @ ?X |</code>) and Apply operator (<code>`</code>).
+	Visit <a href="http://www.madore.org/~david/programs/unlambda/">Unlambda Author's site</a> to learn details of language specification.
+  This interpreter code is available on <a href="https://github.com/inazz/unlambda_js">github</a>.
+	Adventure on the "sample" code is the world biggest Unlambda program, written by <a href="https://github.com/irori/advent-unlambda">Kunihiko Sakamoto</a>.
+	</p>
+</div>
+
+<table id="functions">
+<caption>Functions cheat sheet</caption>
+<tbody>
+<tr><th><code>```sXYZ</code></th>
+	  <td><code>``XZ`YZ</code></td></tr>
+<tr><th><code>``kXY</code></th>
+	  <td><code>X</code></td></tr>
+<tr><th><code>`iX</code></th>
+	  <td><code>X</code></td></tr>
+<tr><th><code>`vX</code></th>
+	  <td><code>v</code></td></tr>
+<tr><th><code>`cX</code></th>
+	  <td><code>`X&lt;cont&gt;</code> (<code>&lt;cont&gt;</code> is current continuation. when <code>`&lt;cont&gt;Y</code> is evaluated, the program continues as if <code>`cX</code> returns <code>Y</code>.)</td></tr>
+<tr><th><code>``dXY</code></th>
+	  <td><code>`XY</code> (but evaluate <code>Y</code> first, then <code>X</code>)</td></tr>
+<tr><th><code>`.XY</code></th>
+	  <td><code>Y</code> (and output <code>X</code>)</td></tr>
+<tr><th><code>`eX</code></th>
+    <td>Program exits with code <code>X</code>.</td></tr>
+<tr><th><code>`@X</code></th>
+    <td><code>`Xi</code> iff successfully read a character from STDIN and set it as chrrent character. Otherwise <code>`Xv</code></td></tr>
+<tr><th><code>`?XY</code></th>
+    <td><code>`Yi</code> iff last application of <code>@</code> sucessfully set current character to <code>X</code>. Othersize <code>`Yv</code></td></tr>
+<tr><th><code>`|X</code></th>
+    <td><code>`X.Y</code> iff last application of <code>@</code> successfully set current character to <code>Y</code>. Otherwise <code>`Xv</code></td></tr>
+</tbody></table>
+
 </div>
 </body>
 </html>
