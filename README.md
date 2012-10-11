@@ -1,9 +1,11 @@
 unlambda_js
 ===========
 
-unlambda interpreter implemented by javascript.
+Unlambda interpreter implemented by javascript.
+Now available on [inazz.jp][inazz_jp_unlambda]!
+ [inazz_jp_unlambda]: http://inazz.jp/unlambda/
 
-Javascript code is tested by google-js-test.
+Code is tested by google-js-test.
 To install google-js-test, read and run scripts/install_gjstest.rb
 
 <pre>
